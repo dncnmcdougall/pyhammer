@@ -1,0 +1,5 @@
+- [ ] Combinatorics for hits (sustained hits should cause more hits)
+- [ ] Apply damage, mortal wounds and feel no pains
+- [ ] D3, D6, for attacks 
+- [ ] D3, D6, for damage 
+- [ ] Reroll failure / critical failure

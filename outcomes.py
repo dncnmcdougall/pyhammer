@@ -1,10 +1,11 @@
+from enum import Enum
 from typing import Type, TypeVar
 
 from dataclasses import dataclass
 
 T = TypeVar('T')
 
-def collect(items: Type[T]) -> dict[T, int]:
+def collect(items: list[T]) -> dict[T, int]:
         collection = {}
         for item in items:
             if item not in collection:
@@ -14,10 +15,43 @@ def collect(items: Type[T]) -> dict[T, int]:
         return collection
 
 
+
+class Success(Enum):
+    FAILURE = 0
+    SUCCESS = 1
+    CRITICAL = 2
+
+    def __bool__(self) -> bool:
+        return self.value != 0
+
+    def critical(self) -> bool:
+        return self.value == Success.CRITICAL.value
+
+    @staticmethod
+    def from_bool(value: bool) -> "Success":
+        return Success.SUCCESS if value else Success.FAILURE
+
+    def __lt__(self, other) -> bool:
+        return self.value < other.value
+
+    def __repr__(self) -> str:
+        return self.name
+
+def failure() -> Success:
+    return Success.FAILURE
+
+def success(value: bool = True) -> Success:
+    if value:
+        return Success.SUCCESS
+    return Success.FAILURE
+
+def critical() -> Success:
+    return Success.CRITICAL
+
 @dataclass(frozen=True)
 class Outcome:
     value: int
-    success: bool
+    success: Success
     bypass_next: bool
 
     def __lt__(self, other) -> bool:
@@ -30,7 +64,7 @@ class Outcome:
         return False
 
     def __repr__(self) -> str:
-        return f"O({self.value}, {str(self.success)[0]}{str(self.bypass_next)[0]})"
+        return f"O({self.value}, {repr(self.success)[0]}{str(self.bypass_next)[0]})"
 
 @dataclass(frozen=True)
 class OutcomeSequence:
