@@ -11,13 +11,13 @@ class SimpleModel:
 
     def save(self, armour_piercing: int) -> list[Outcome]:
         successes = [ i >= (self.S - armour_piercing) for i in range(1,7) ]
-        return [ Outcome(1 if success else 0, oc.success(success), False) for success in successes ]
+        return [ Outcome(1 if success else 0, oc.success(success), False, False) for success in successes ]
 
     def damage_modifier(self, damage: int) -> list[Outcome]:
-        return [Outcome(damage, oc.success(), False) ]
+        return [Outcome(damage, oc.success(), False, False) ]
 
     def feel_no_pain(self) -> list[Outcome]:
-        return [Outcome(1, oc.failure(), False) ]
+        return [Outcome(1, oc.failure(), False, False) ]
 
 
 

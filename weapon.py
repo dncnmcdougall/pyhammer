@@ -45,33 +45,33 @@ class SimpleWeapon:
 
     @modify("attack")
     def attack(self, options: AttackOptions) -> list[Outcome]:
-        return [ Outcome(self.A,oc.success(),False) ]
+        return [ Outcome(self.A,oc.success(),False, False) ]
 
     @modify("hit")
     def hit(self, options: AttackOptions) -> list[Outcome]:
         return [ 
-            Outcome(1, oc.failure(), False),
-            Outcome(1, oc.success(2 >= self.WS), False),
-            Outcome(1, oc.success(3 >= self.WS), False),
-            Outcome(1, oc.success(4 >= self.WS), False),
-            Outcome(1, oc.success(5 >= self.WS), False),
-            Outcome(1, oc.critical(), False),
+            Outcome(1, oc.failure(), False, False),
+            Outcome(1, oc.success(2 >= self.WS), False, False),
+            Outcome(1, oc.success(3 >= self.WS), False, False),
+            Outcome(1, oc.success(4 >= self.WS), False, False),
+            Outcome(1, oc.success(5 >= self.WS), False, False),
+            Outcome(1, oc.critical(), False, False),
         ]
 
     @modify("wound")
     def wound(self, target_toughness: int, options:AttackOptions) -> list[Outcome]:
         return [ 
-                Outcome(1, oc.failure(), False),
-                Outcome(2, oc.success(self.S > 2*target_toughness), False),
-                Outcome(3, oc.success(self.S > target_toughness), False),
-                Outcome(4, oc.success(self.S >= target_toughness), False),
-                Outcome(5, oc.success(2*self.S > target_toughness) , False),
-                Outcome(6, oc.critical(), False),
+                Outcome(1, oc.failure(), False, False),
+                Outcome(2, oc.success(self.S > 2*target_toughness), False, False),
+                Outcome(3, oc.success(self.S > target_toughness), False, False),
+                Outcome(4, oc.success(self.S >= target_toughness), False, False),
+                Outcome(5, oc.success(2*self.S > target_toughness) , False, False),
+                Outcome(6, oc.critical(), False, False),
                 ]
 
     @modify("damage")
     def damage(self, options:AttackOptions) -> list[Outcome]:
-        return [ Outcome(self.D, oc.success(), False) ]
+        return [ Outcome(self.D, oc.success(), False, False) ]
 
     def __str__(self) -> str:
         return f"{self.name}: A {self.A}, WS {self.WS}+, S {self.S}, AP -{self.AP}, D {self.D}"
@@ -99,14 +99,14 @@ def modifier(roll: str) -> Callable[[Modifier], Modifier]:
 
 @attack_modifier
 def torrent(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
-    return [ Outcome(o.value, o.success, bool(o.success)) for o in outcomes ]
+    return [ Outcome(o.value, o.success, bool(o.success), o.reroll) for o in outcomes ]
 
 def rapid_fire(amount:int) -> AttackModifier:
 
     @attack_modifier
     def update(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
         if options.rng*2 <=  weapon.R:
-            return [ Outcome(o.value + amount , o.success, o.bypass_next) for o in outcomes ]
+            return [ Outcome(o.value + amount , o.success, o.bypass_next, o.reroll) for o in outcomes ]
         else:
             return outcomes
 
@@ -116,24 +116,28 @@ def sustained_hits(count:int) -> Modifier:
 
     @modifier('hit')
     def update(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
-        return [ Outcome(o.value + (count if o.success.critical() else 0), o.success, o.bypass_next) for o in outcomes ]
+        return [ Outcome(o.value + (count if o.success.critical() else 0), o.success, o.bypass_next, o.reroll) for o in outcomes ]
 
     return update
 
 @modifier('hit')
 def lethal_hits(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
-    return [ Outcome(o.value, o.success, o.success.critical() or o.bypass_next) for o in outcomes ]
+    return [ Outcome(o.value, o.success, o.success.critical() or o.bypass_next, o.reroll) for o in outcomes ]
 
 
 @wound_modifier
 def devestating_wounds(weapon: SimpleWeapon, target_toughness:int, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
-    return [ Outcome(o.value, o.success, o.success.critical() or o.bypass_next) for o in outcomes ]
+    return [ Outcome(o.value, o.success, o.success.critical() or o.bypass_next, o.reroll) for o in outcomes ]
+
+@wound_modifier
+def twin_linked(weapon: SimpleWeapon, target_toughness:int, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
+    return [ Outcome(o.value, o.success, o.success.critical() or o.bypass_next, True) for o in outcomes ]
 
 def anti(amount:int) -> WoundModifier:
 
     @wound_modifier
     def update(weapon: SimpleWeapon, target_toughtness:int, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
-        return [ Outcome(o.value , oc.critical() if o.value >= amount else o.success, o.bypass_next) for o in outcomes ]
+        return [ Outcome(o.value , oc.critical() if o.value >= amount else o.success, o.bypass_next, o.reroll) for o in outcomes ]
 
     return update
 
@@ -142,7 +146,7 @@ def melta(count:int) -> Modifier:
     @modifier('damage')
     def update(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
         if options.rng*2 <=  weapon.R:
-            return [ Outcome(o.value + count, o.success, o.bypass_next) for o in outcomes ]
+            return [ Outcome(o.value + count, o.success, o.bypass_next, o.reroll) for o in outcomes ]
         else:
             return outcomes
 

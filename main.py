@@ -3,134 +3,109 @@ import math
 from dataclasses import dataclass
 from icecream import ic
 
-from rules import SimpleModel, SimpleWeapon
+from weapon import SimpleWeapon, AttackOptions
+from weapon import torrent, sustained_hits, rapid_fire, lethal_hits, devestating_wounds, melta, anti, twin_linked
+from model import SimpleModel
 
-from outcomes import Outcome, OutcomeSequence, OutcomeTree
-import outcomes as oc
+from events import Event, EventSet, EventOutcome
+import events as ev
 
 
-
-def to_trees(outcomes: list[Outcome]) -> list[OutcomeTree]:
-    return [ OutcomeTree(count=c, outcome=o, children=[]) for o, c  in oc.collect(outcomes).items() ]
-
-def damageTree(weapon:SimpleWeapon, target:SimpleModel) -> list[OutcomeTree]:
-    # TODO feel no pain
-    results = []
-    for damage in weapon.damage():
-        if damage.bypass_next:
-            results.append(OutcomeTree(1, damage, []))
-        if damage.success:
-            # TODO: damage modifiers
-            # results.append(OutcomeTree(1, Outcome(target.damage_modifier(damage.value), True, False), []))
-            results.append(OutcomeTree(1, damage, []))
-        else:
-            results.append(OutcomeTree(1, Outcome(0, False, False), []))
-    return results
-
-def saveTree(weapon:SimpleWeapon, target:SimpleModel) -> list[OutcomeTree]:
+def saveRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, reroll:bool) -> EventOutcome:
     results = []
     for save in target.save(weapon.AP):
         if save.success:
-            results.append(OutcomeTree(1, Outcome(0, False, False), []))
+            results.append(ev.failure())
+        elif save.reroll and reroll:
+             results.append(saveRoll(weapon, target, options, False))
         else:
-            results.append(OutcomeTree(1, Outcome(1, True, False), damageTree(weapon, target)))
-    return results
+            results.append(ev.success())
+    return ev.superposition(results)
 
-def woundTree(weapon:SimpleWeapon, target:SimpleModel) -> list[OutcomeTree]:
+def woundRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, reroll:bool) -> EventOutcome:
     results = []
-    for wound in weapon.wound(target.T):
+    for wound in weapon.wound(target.T, options):
         if wound.bypass_next:
-            results.append(OutcomeTree(1, Outcome(1, True, True), damageTree(weapon, target)))
+            results.append(ev.success())
         elif wound.success:
-            results.append(OutcomeTree(1, Outcome(1, True, False), saveTree(weapon, target)))
+            results.append(saveRoll(weapon, target, options, True))
         else:
-            results.append(OutcomeTree(1, Outcome(0, False, False), []))
-    return results
+            results.append(ev.failure())
+    return ev.superposition(results)
 
-def hitTree(weapon:SimpleWeapon, target:SimpleModel) -> list[OutcomeTree]:
-    results = []
-    for hit in weapon.hit():
+def hitRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, reroll:bool) -> EventSet:
+    results:list[EventSet] = []
+    for hit in weapon.hit(options):
         if hit.bypass_next:
-            results.append(OutcomeTree(hit.value, Outcome(1, True, True), saveTree(weapon, target)))
+            possible_hits:list[EventSet] = []
+            for _ in range(hit.value):
+                possible_hits.append(ev.One(Event('hit', saveRoll(weapon, target, options, True))))
+            results.append(ev.All(possible_hits, name='byp'))
         elif hit.success:
-            results.append(OutcomeTree(hit.value, Outcome(1, True, False), woundTree(weapon, target)))
+            possible_hits:list[EventSet] = []
+            for _ in range(hit.value):
+                possible_hits.append(ev.One(Event('hit', woundRoll(weapon, target, options, True))))
+            results.append(ev.All(possible_hits, name='suc'))
+        elif hit.reroll and reroll:
+             results.append(hitRoll(weapon, target, options, False))
         else:
-            results.append(OutcomeTree(1, Outcome(0, False, False), []))
-    return results
+            results.append(ev.One(Event('hit', ev.failure())))
+    return ev.Together(results, name="hr")
 
-def computeDamage(weapon:SimpleWeapon, target:SimpleModel, rng) -> dict[OutcomeSequence, float]:
-    # Not yet correct: A tree represents a sequence of modifiers.
-    # Attackes do not modify each other, rather they combine combinatorally
-    attack_trees = []
-    for attack in weapon.attack(rng):
+def attackRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, reroll:bool) -> EventSet:
+    results:list[EventSet] = []
+    for attack in weapon.attack(options):
         if attack.bypass_next:
+            possible_attacks:list[EventSet] = []
             for _ in range(attack.value):
-                attack_trees.append(OutcomeTree(1, Outcome(1, True, True), woundTree(weapon, target)))
+                possible_attacks.append(ev.One(Event('wound',woundRoll(weapon, target, options, True))))
+            results.append(ev.All(possible_attacks, name='byp'))
         elif attack.success:
+            possible_attacks:list[EventSet] = []
             for _ in range(attack.value):
-                attack_trees.append(OutcomeTree(1, Outcome(1, True, False), hitTree(weapon, target)))
+                possible_attacks.append(hitRoll(weapon, target, options, True))
+            results.append(ev.All(possible_attacks, name='suc'))
+        elif attack.reroll and reroll:
+             results.append(attackRoll(weapon, target, options, False))
         else:
-            attack_trees.append(OutcomeTree(1, Outcome(1, False, False), []))
+            results.append(ev.One(Event('attack', ev.failure())))
+    return ev.Together(results, name="ar")
 
-    final_outcomes: dict[OutcomeSequence, float] = {}
-    for ii,tree in enumerate(attack_trees):
-        summaries = defaultdict(lambda: 0)
-        for key, value in tree.to_sequences().items():
-            summaries[key.outcomes[-1]] += value
 
-        if len(final_outcomes) == 0 :
-            final_outcomes = { OutcomeSequence([out]):value for out, value in summaries.items() }
-        else:
-            new_final_outcomes = {}
-            for f_seq, f_value in final_outcomes.items():
-                for out, value in summaries.items():
-                    key = OutcomeSequence.append(f_seq, out)
-                    new_final_outcomes[key] = f_value*value
-            final_outcomes = new_final_outcomes
-
-    assert abs(sum(final_outcomes.values()) -1) <1e-5
-
-    return final_outcomes
 
 
 if __name__ == "__main__":
 
-    # tree = OutcomeTree(1, Outcome(1, True, True), [
-    #                     OutcomeTree(2, Outcome(1, True, True), [
-    #                         OutcomeTree(2, Outcome(1, True, True), []),
-    #                         OutcomeTree(3, Outcome(1, False, False), []),
-    #                         ]),
-    #                     OutcomeTree(1, Outcome(1, False, False), []),
-    #                     OutcomeTree(1, Outcome(1, False, False), []),
-    #                     ])
-    # ic(tree)
-    # ic(tree.to_sequences())
-    # exit()
-
-
     weapons = [
-        SimpleWeapon("Deathwatch Bolt Rifle", 2, 3, 4,-1,1),
-        SimpleWeapon("Bolt Rifle2 ", 2, 3, 4,0,1),
-        SimpleWeapon("Gauss flayer", 1, 4, 4,0,1),
+        # SimpleWeapon("Deathwatch Bolt Rifle", 24, 2, 3, 5,-2,1),
+        # SimpleWeapon("Bolt Sniper Rifle", 36, 1, 3, 5,-2,3),
+        SimpleWeapon("Bolt Rifle", 24, 2, 3, 4,-1,1),
+        SimpleWeapon("Bolt Rifle TW", 24, 2, 3, 4,-1,1, [twin_linked]),
+        # SimpleWeapon("Bolt Rifle sus 2", 24, 2, 3, 4,-1,1, [sustained_hits(2)]),
+        # SimpleWeapon("Gauss flayer", 24, 1, 4, 4,0,1, [rapid_fire(1)]),
+        # SimpleWeapon("Flamer WS 0", 12, 3, 0, 3,0,1, [torrent]),
+        # SimpleWeapon("Gauss flayer ", 24, 1, 4, 4,0,1, ),
+        # SimpleWeapon("Gauss flayer sus 2", 24, 1, 4, 4,0,1, [sustained_hits(2)]),
+        # SimpleWeapon("Gauss flayer LH", 24, 1, 4, 4,0,1, [lethal_hits]),
+        # SimpleWeapon("Gauss flayer DW", 24, 1, 4, 4,0,1, [ devestating_wounds]),
+        # SimpleWeapon("Gauss flayer LH DW", 24, 1, 4, 4,0,1, [lethal_hits, devestating_wounds]),
         ]
     models = [
         SimpleModel("Warrior", 4, 4, 1),
-        SimpleModel("Intercessor", 4, 3, 2),
+        # SimpleModel("Intercessor", 4, 3, 2),
         ]
 
-    for weapon in weapons:
-        for model in models:
-            print(f'{weapon.name} at {model.name}')
-            damage = computeDamage(weapon, model, 12)
+    for model in models:
+        for weapon in weapons:
+            for rng in [24]:
+                options = AttackOptions(rng, False)
+                print(f'{weapon.name} at {model.name} at {rng}"')
+                wounds = attackRoll(weapon, model, options, True)
 
-            sorted_sequences = { tuple(sorted(list(d.outcomes))): v for d,v in damage.items() }
-            summary = defaultdict(lambda:0)
-            for k,v in sorted_sequences.items():
-                summary[k] += v
-            for k, v in summary.items():
-                print(f'{v*100:.2g}%: {k}')
+                results = sorted([ (key, prob) for key, prob in wounds.outcomes().items() ],key=lambda x: x[1], reverse=True)
 
-
+                for key, prob in results:
+                    print(f'{prob*100:.3g}%: {repr(key)}')
 
 
 

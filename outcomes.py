@@ -1,5 +1,6 @@
+from collections import defaultdict
 from enum import Enum
-from typing import Type, TypeVar
+from typing import Type, TypeVar, Self
 
 from dataclasses import dataclass
 
@@ -14,15 +15,13 @@ def collect(items: list[T]) -> dict[T, int]:
                 collection[item] += 1
         return collection
 
-
-
 class Success(Enum):
     FAILURE = 0
     SUCCESS = 1
     CRITICAL = 2
 
     def __bool__(self) -> bool:
-        return self.value != 0
+        return self.value > 0
 
     def critical(self) -> bool:
         return self.value == Success.CRITICAL.value
@@ -53,6 +52,7 @@ class Outcome:
     value: int
     success: Success
     bypass_next: bool
+    reroll: bool
 
     def __lt__(self, other) -> bool:
         if self.value < other.value:
@@ -61,60 +61,54 @@ class Outcome:
             return True
         if self.bypass_next < other.bypass_next:
             return True
+        if self.reroll < other.reroll:
+            return True
         return False
 
     def __repr__(self) -> str:
-        return f"O({self.value}, {repr(self.success)[0]}{str(self.bypass_next)[0]})"
-
-@dataclass(frozen=True)
-class OutcomeSequence:
-    outcomes: tuple[Outcome]
-
-    def __init__(self, outcomes):
-        object.__setattr__(self, 'outcomes', tuple(outcomes))
-
-    def success(self):
-        result = len(self.outcomes) > 0 
-        for outcome in self.outcomes:
-            result = result and outcome.success
-        return result
-
-    def __repr__(self) -> str:
-        return f"OS({','.join(repr(o) for o in self.outcomes)})"
-
-    @staticmethod
-    def append(original: "OutcomeSequence", addition: Outcome) -> "OutcomeSequence":
-        return OutcomeSequence([*original.outcomes, addition])
-
-    @staticmethod
-    def prepend(addition: Outcome, original: "OutcomeSequence") -> "OutcomeSequence":
-        return OutcomeSequence([addition, *original.outcomes])
-
-    @staticmethod
-    def join(*outcomes: Outcome) -> "OutcomeSequence":
-        return OutcomeSequence(outcomes)
+        values = [
+            repr(self.success)[0],
+            'B' if self.bypass_next else '-',
+            'R' if self.reroll else '-',
+        ]
+        return f"O({self.value}, {''.join(values)})"
 
 
-@dataclass
-class OutcomeTree:
-    count: float
-    outcome: Outcome
-    children: list["OutcomeTree"]
+# @dataclass(frozen=True)
+# class OutcomeTree:
+#     count: float
+#     outcome: Outcome
+#     children: list[Self]
+#
+#     def to_sequences(self) -> dict[OutcomeSequence, float]:
+#         results = {}
+#         if len(self.children) == 0 :
+#             results[OutcomeSequence([self.outcome])] = self.count
+#         else:
+#             total = sum([ c.count for c in self.children ])
+#             for child in self.children:
+#                 child_sequences = child.to_sequences()
+#                 for sequence, count in child_sequences.items():
+#                     this_oc = OutcomeSequence.prepend(self.outcome, sequence)
+#                     this_count = (self.count/total)*count
+#                     if this_oc not in results:
+#                         results[this_oc] = this_count
+#                     else:
+#                         results[this_oc] += this_count
+#         return results
+#     
+#     def add_tree_to_leaves(self, tree: list["OutcomeTree"]) -> "OutcomeTree":
+#         if len(self.children) == 0 :
+#             return OutcomeTree(self.count, self.outcome, tree)
+#         else:
+#             return OutcomeTree(self.count, self.outcome, [child.add_tree_to_leaves(tree) for child in self.children])
+#
+#     def summarise(self) -> dict[Outcome, float]:
+#         summaries = defaultdict(lambda: 0.0)
+#         for key, value in self.to_sequences().items():
+#             summaries[key.outcomes[-1]] += value
+#         return summaries
 
-    def to_sequences(self) -> dict[OutcomeSequence, float]:
-        results = {}
-        if len(self.children) == 0 :
-            results[OutcomeSequence([self.outcome])] = self.count
-        else:
-            total = sum([ c.count for c in self.children ])
-            for child in self.children:
-                child_sequences = child.to_sequences()
-                for sequence, count in child_sequences.items():
-                    this_oc = OutcomeSequence.prepend(self.outcome, sequence)
-                    this_count = (self.count/total)*count
-                    if this_oc not in results:
-                        results[this_oc] = this_count
-                    else:
-                        results[this_oc] += this_count
-        return results
+
+
 
