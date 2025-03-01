@@ -31,28 +31,43 @@ class AttackOptions:
     rng: int
     cover: bool
 
-Dice = Callable[[AttackOptions], list[Outcome]]
+class dice:
 
-def dice(sides:int, addition:int =0) -> Dice:
-    def dice_impl(options:AttackOptions) -> list[Outcome]:
-        return [ Outcome(ii + addition, oc.success(), False, False) for ii in range(1, sides+1) ]
-    return dice_impl
+    def __init__(self, sides:int, addition:int =0):
+        self.sides = sides
+        self.addition = addition
+
+    def __call__(self, options:AttackOptions) -> list[Outcome]:
+        return [ Outcome(ii + self.addition, oc.success(), False, False) for ii in range(1, self.sides+1) ]
+
+    def __str__(self):
+        results = f'd{self.sides}'
+        if self.addition > 0:
+            return f'{results}+{self.addition}'
+        else:
+            return results
 
 @dataclass
 class SimpleWeapon:
     name: str
     R: int
-    A: int|Dice
+    A: int|dice
     WS: int
     S: int
     AP: int
-    D: int|Dice
+    D: int|dice
 
     modifiers: list[RollFunc] = field(default_factory=list)
 
+    def statLine(self) -> str:
+        return f'R:{self.R}" A:{self.A} WS:{self.WS} S:{self.S} AP:{self.AP} D:{self.D}'
+
+    def keywords(self) -> str:
+        return ','.join( [mod.__name__ for mod in self.modifiers] )
+
     @modify("attack")
     def attack(self, options: AttackOptions) -> list[Outcome]:
-        if callable(self.A):
+        if isinstance(self.A, dice):
             return self.A(options)
         else:
             return [ Outcome(self.A,oc.success(),False, False) ]

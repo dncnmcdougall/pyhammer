@@ -1,13 +1,14 @@
+import os
 from collections import defaultdict
-import math
 from dataclasses import dataclass
 from icecream import ic
 
 from weapon import SimpleWeapon, AttackOptions
 from weapon import torrent, sustained_hits, rapid_fire, lethal_hits, devestating_wounds, melta, anti, twin_linked, dice
 from model import SimpleModel
+from table import Table, Heading, Cell, CellValue
 
-from events import EventSet 
+from events import EventSet, EventSuccess 
 import events as ev
 
 def feelNoPainRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, reroll:bool) -> ev.Together:
@@ -21,7 +22,16 @@ def damageRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, r
         possible_damage = []
         for _ in range(damage.value):
             possible_damage.append(feelNoPainRoll(weapon, target, options, True))
-        results.append(ev.All(possible_damage, name="d", meta=dict(spill=spill)))
+
+        all = ev.All(possible_damage)
+
+        res = []
+        for key, prob in all.outcomes().items():
+            success = EventSuccess(sum( k.value for k in key.outcomes ), spill=spill)
+            res.append(ev.Leaf('a', success, probability=prob))
+        results.append(ev.Together( res))
+
+        # results.append(ev.All(possible_damage, name="d"))
 
     return ev.Together(results, name="dr")
 
@@ -93,7 +103,10 @@ def attackRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, r
 if __name__ == "__main__":
 
     weapons = [
-        # SimpleWeapon("Deathwatch Bolt Rifle", 24, 2, 3, 5,-2,1),
+        SimpleWeapon("Deathwatch Bolt Rifle", 24, 2, 3, 5,-2,1, [lethal_hits]),
+        SimpleWeapon("Plasma incinerator ", 24, 2, 3, 7,-2,1 ),
+        SimpleWeapon("Plasma incinerator super", 24, 2, 3, 8,-3,2 ),
+        SimpleWeapon("Plasma incinerator super", 24, 2, 3, 8,-3,2 ),
         # SimpleWeapon("Bolt Sniper Rifle", 36, 1, 3, 5,-2,3),
         # SimpleWeapon("Bolt Rifle", 24, 2, 3, 4,-1,1),
         # SimpleWeapon("Bolt Rifle TW", 24, 2, 3, 4,-1,1, [twin_linked]),
@@ -103,16 +116,19 @@ if __name__ == "__main__":
         # SimpleWeapon("Flamer 3", 12, 3, 0, 3,0,1, [torrent]),
         # SimpleWeapon("Flamer D3", 12, dice(3), 0, 3,0,1, [torrent]),
         # SimpleWeapon("Flamer D3+1", 12, dice(3, 1), 0, 3,0,1, [torrent]),
-        SimpleWeapon("Gauss flayer", 24, 1, 4, 4,0,1 ),
-        # SimpleWeapon("Gauss flayer LH", 24, 1, 4, 4,0,1, [lethal_hits]),
-        # SimpleWeapon("Gauss flayer DW", 24, 1, 4, 4,0,1, [ devestating_wounds]),
-        # SimpleWeapon("Gauss flayer LH DW", 24, 1, 4, 4,0,1, [lethal_hits, devestating_wounds]),
+        SimpleWeapon("Gauss flayer", 24, 2, 4, 4,0,1 ),
         ]
     models = [
-        SimpleModel("Warrior", 4, 4, 1, 0),
-        SimpleModel("Warrior FNP 5", 4, 4, 1, 5),
+        # SimpleModel("Warrior", 4, 4, 1, 0),
         # SimpleModel("Intercessor", 4, 3, 2, 0),
+        # SimpleModel("Aggressor", 6, 3, 3, 0),
+        # SimpleModel("Destroyer", 6, 3, 3, 0),
+        # SimpleModel("Overlord", 5, 2, 6, 0),
+        # SimpleModel("TOD", 8, 3, 12, 0),
+        # SimpleModel("Shard", 11, 4, 12, 0),
+        # SimpleModel("Scarabs", 2, 6, 4, 0),
         ]
+
 
     for model in models:
         for weapon in weapons:
@@ -124,7 +140,8 @@ if __name__ == "__main__":
                 results = sorted([ (key, prob) for key, prob in damage.outcomes().items() ],key=lambda x: x[1], reverse=True)
 
                 for key, prob in results:
-                    print(f'{prob*100:.3g}%: {repr(key)}')
+                    if sum( k.value for k in key.outcomes ) ==0 :
+                        print(f'{(1-prob)*100:.3g}%: {repr(key)}')
 
 
 
