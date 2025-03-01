@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from icecream import ic
 
 @dataclass(frozen=True)
 class Heading:
@@ -10,9 +11,8 @@ class Heading:
 class CellValue:
     is_set: bool = False
 
-    value_1: float = -1
-    value_2: float = -1
-    value_3: float = -1
+    values: list[float] = field(default_factory=list)
+
 
 
 @dataclass
@@ -30,8 +30,8 @@ class Table:
         self.columns = []
         self.rows = []
 
-        self.n = 4
-        self.step = 100/self.n
+        self.level_n = 4
+        self.damage_n = 5
 
     def setColumns( self, columns: list[Heading] ) -> None:
         self.columns = columns
@@ -59,31 +59,35 @@ class Table:
 
     def _cellItem(self, value: float, cls:str) -> str:
         cls_suffix = ''
-        for ii in range(self.n):
-            if value < (ii+1)*self.step:
+        step = 100/self.level_n
+        for ii in range(self.level_n):
+            if value < (ii+1)*step:
                 cls_suffix = str(ii+1)
                 break
-        return f'<td class="{cls} {cls}_{cls_suffix}"> {value:.2g} </td>\n'
+        return f'<td class="{cls} {cls}_{cls_suffix}"> {value:.0f} </td>\n'
 
 
-    def write(self, filename, name, sub_name, sub_name_2):
+    def write(self, filename, *headings:str):
 
         with open(filename,'w') as fle:
-            fle.write('<html>\n')
-            fle.write('<head>\n')
-            fle.write('<meta http-equiv="content-type" content="text/html; charset=UTF-8">\n')
-            fle.write('<style>\n')
+            fle.write('''
+            <html>
+            <head>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+            <style>
+            ''')
+            fle.write('\n')
 
-            hues = [135, 200, 0]
-            step = 60/(self.n-1)
-            for ii in range(3):
+            hues = [135, 200, 320, 30, 0]
+            step = 60/(self.level_n-1)
+            for ii in range(self.damage_n):
                 fle.write(f'.val{ii+1} {{\n')
                 if ii > 0:
                     fle.write('display: none;\n')
                 fle.write('}\n')
                 fle.write('\n')
 
-                for jj in range(self.n):
+                for jj in range(self.level_n):
                     fle.write(f'.val{ii+1}_{jj+1} {{\n')
                     fle.write(f'background: hsl({hues[ii]}, 100%, {100-(jj)*step}%);\n')
                     fle.write('}\n')
@@ -93,21 +97,20 @@ class Table:
             fle.write('<body>\n')
 
             # Heading and controls table
-            fle.write(f'''<table>
-            <tr>
-                    <th>{name}</th>
-                    <td>Show 1+ damage<input type="checkbox" id="val1" checked oninput='changeFunc(event)'/></td>
-                </tr>
-                <tr>
-                    <td>{sub_name}</td>
-                    <td>Show 2+ damage<input type="checkbox" id="val2" oninput='changeFunc(event)'/></td>
-                </tr>
-                <tr>
-                    <td>{sub_name_2}</td>
-                    <td>Show 3+ damage<input type="checkbox" id="val3" oninput='changeFunc(event)'/></td>
-                </tr>
-            </table>
-            ''')
+            fle.write('<table>\n')
+            cnt = max(len(headings), self.damage_n)
+            for ii in range(cnt):
+                fle.write('<tr>\n')
+                if ii < len(headings):
+                    fle.write(f'<th>{headings[ii]}</th>\n')
+                else:
+                    fle.write('<th></th>\n')
+                if ii < self.damage_n:
+                    fle.write(f'<td>Show {ii+1}+ damage<input type="checkbox" id="val{ii+1}" {"checked" if ii == 0 else ""} oninput="changeFunc(event)"/></td>\n')
+                else:
+                    fle.write('<td></td>\n')
+                fle.write('</tr>\n')
+            fle.write('</table>\n')
 
             # Heading Table
             fle.write('<table>\n')
@@ -118,7 +121,7 @@ class Table:
             fle.write('</tr>\n')
             fle.write('<th></th>\n')
             for column in self.columns:
-                for ii in range(3):
+                for ii in range(self.damage_n):
                     fle.write(f'<th class="val{ii+1}">{ii+1}+</th>\n')
             fle.write('</tr>\n')
             for row in self.rows:
@@ -126,12 +129,11 @@ class Table:
                 fle.write(f'<td>{row.name}</td>\n')
                 for cell in self.cells[row].values():
                     if not cell.value.is_set:
-                        for ii in range(3):
+                        for ii in range(self.damage_n):
                             fle.write(f'<td class="val{ii+1}">-</td>\n')
                     else:
-                        fle.write(self._cellItem(cell.value.value_1, 'val1'))
-                        fle.write(self._cellItem(cell.value.value_2, 'val2'))
-                        fle.write(self._cellItem(cell.value.value_3, 'val3'))
+                        for ii in range(self.damage_n):
+                            fle.write(self._cellItem(cell.value.values[ii], f'val{ii+1}'))
                 fle.write('</tr>\n')
             fle.write('</table>\n')
 
@@ -146,14 +148,16 @@ class Table:
                         let rule = sheet.cssRules[jj]
                         if (rule.selectorText == '.'+event.srcElement.id) {
                             rule.style.setProperty('display', event.srcElement.checked ? 'table-cell' : 'none');
+                            console.log(rule);
                         }
                     }
                 }
 
-                let cols = document.getElementById('val1').checked
-                       + document.getElementById('val2').checked + 
-                       + document.getElementById('val3').checked;
+                let cols = ''')
+            for ii in range(self.damage_n):
+                fle.write(f'+ document.getElementById("val{ii+1}").checked\n')
 
+            fle.write('''
                 let elements = document.querySelectorAll('.main_heading');
                 for( let ii=0; ii < elements.length; ii++) {
                     elements[ii].setAttribute('colspan',cols);
@@ -166,7 +170,27 @@ class Table:
 
 
 
+class Index:
 
+    def __init__(self):
+        self.items = {}
+
+    def addFile(self, name, filename):
+        self.items[name] = filename
+
+    def write(self, filename):
+        with open(filename,'w') as fle:
+            fle.write('''
+            <html>
+            <head>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+            <body>
+            ''')
+            fle.write('<ul>\n')
+            for name, filename in self.items.items():
+                fle.write(f'<li><a href="{filename}">{name}</a></li>\n')
+            fle.write('</ul>\n')
+            fle.write('</body>\n')
 
 
 

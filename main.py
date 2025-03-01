@@ -6,7 +6,7 @@ from icecream import ic
 from weapon import SimpleWeapon, AttackOptions
 from weapon import torrent, sustained_hits, rapid_fire, lethal_hits, devestating_wounds, melta, anti, twin_linked, dice
 from model import SimpleModel
-from table import Table, Heading, Cell, CellValue
+from table import Table, Heading, Cell, CellValue, Index
 
 from events import EventSet, EventSuccess 
 import events as ev
@@ -117,20 +117,11 @@ if __name__ == "__main__":
         # SimpleWeapon("Flamer D3", 12, dice(3), 0, 3,0,1, [torrent]),
         # SimpleWeapon("Flamer D3+1", 12, dice(3, 1), 0, 3,0,1, [torrent]),
         SimpleWeapon("Gauss flayer", 24, 2, 4, 4,0,1 ),
+        SimpleWeapon("UBER GUN", 24, 5, 2, 14,0,2 ),
         ]
-    models = [
-        # SimpleModel("Warrior", 4, 4, 1, 0),
-        # SimpleModel("Intercessor", 4, 3, 2, 0),
-        # SimpleModel("Aggressor", 6, 3, 3, 0),
-        # SimpleModel("Destroyer", 6, 3, 3, 0),
-        # SimpleModel("Overlord", 5, 2, 6, 0),
-        # SimpleModel("TOD", 8, 3, 12, 0),
-        # SimpleModel("Shard", 11, 4, 12, 0),
-        # SimpleModel("Scarabs", 2, 6, 4, 0),
-        ]
-
 
     options = AttackOptions(12, False)
+    index = Index();
     for weapon in weapons:
         table = Table()
         table.setRows([Heading(f'T {ii}', ii) for ii in range(2,15)])
@@ -143,24 +134,18 @@ if __name__ == "__main__":
             damage = attackRoll(weapon, model, options, True)
 
             results = damage.outcomes().items()
-            prob_1 = 0
-            prob_2 = 0
-            prob_3 = 0
+            values = [ 0.0 for _ in range(table.damage_n) ]
             for key, prob in results:
                 damage = sum( k.value for k in key.outcomes )
-                if damage >= 3:
-                    prob_3 += prob
-                if damage >=2:
-                    prob_2 += prob
-                if damage >=1:
-                    prob_1 += prob
-            new_cell = Cell(cell.row, cell.column, CellValue(True, prob_1*100, prob_2*100, prob_3*100))
+                for ii in range(table.damage_n):
+                    if damage >= (ii+1):
+                        values[ii] += prob
+            new_cell = Cell(cell.row, cell.column, CellValue(True, [ v*100 for v in values]))
 
             table.setCells([new_cell])
-        table.write(os.path.join('/home/duncan/Desktop//tables', f'{weapon.name}.html'), weapon.name, weapon.statLine(), weapon.keywords())
-
-    for ii in range(1,13):
-        models.append(SimpleModel(f"T{ii}", ii, 3, 1, 0))
+        table.write(os.path.join('tables', f'{weapon.name}.html'), weapon.name, weapon.statLine(), weapon.keywords())
+        index.addFile(weapon.name, f'{weapon.name}.html')
+    index.write(os.path.join('tables', 'index.html'))
 
 
 
