@@ -8,6 +8,7 @@ class SimpleModel:
     T: int
     S: int
     W: int
+    FNP: int
 
     def save(self, armour_piercing: int) -> list[Outcome]:
         successes = [ i >= (self.S - armour_piercing) for i in range(1,7) ]
@@ -17,7 +18,11 @@ class SimpleModel:
         return [Outcome(damage, oc.success(), False, False) ]
 
     def feel_no_pain(self) -> list[Outcome]:
-        return [Outcome(1, oc.failure(), False, False) ]
+        if self.FNP == 0 :
+            return [Outcome(1, oc.failure(), False, False) ]
+        else:
+            return [ Outcome(1, oc.success(i >= self.FNP), False, False) for i in range(1,7) ]
+
 
 
 

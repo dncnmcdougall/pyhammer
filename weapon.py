@@ -31,21 +31,31 @@ class AttackOptions:
     rng: int
     cover: bool
 
+Dice = Callable[[AttackOptions], list[Outcome]]
+
+def dice(sides:int, addition:int =0) -> Dice:
+    def dice_impl(options:AttackOptions) -> list[Outcome]:
+        return [ Outcome(ii + addition, oc.success(), False, False) for ii in range(1, sides+1) ]
+    return dice_impl
+
 @dataclass
 class SimpleWeapon:
     name: str
     R: int
-    A: int
+    A: int|Dice
     WS: int
     S: int
     AP: int
-    D: int
+    D: int|Dice
 
     modifiers: list[RollFunc] = field(default_factory=list)
 
     @modify("attack")
     def attack(self, options: AttackOptions) -> list[Outcome]:
-        return [ Outcome(self.A,oc.success(),False, False) ]
+        if callable(self.A):
+            return self.A(options)
+        else:
+            return [ Outcome(self.A,oc.success(),False, False) ]
 
     @modify("hit")
     def hit(self, options: AttackOptions) -> list[Outcome]:
@@ -71,6 +81,8 @@ class SimpleWeapon:
 
     @modify("damage")
     def damage(self, options:AttackOptions) -> list[Outcome]:
+        if callable(self.D):
+            return self.D(options)
         return [ Outcome(self.D, oc.success(), False, False) ]
 
     def __str__(self) -> str:
