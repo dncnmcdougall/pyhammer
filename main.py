@@ -153,9 +153,9 @@ if __name__ == "__main__":
             new_cell = Cell(cell.row, cell.column, CellValue(True, [ v*100 for v in values]))
 
             table.setCells([new_cell])
-        table.write(os.path.join('tables', f'{weapon.name}.html'), weapon.name, weapon.statLine(), weapon.keywords())
+        table.write(os.path.join('docs', f'{weapon.name}.html'), weapon.name, weapon.statLine(), weapon.keywords())
         index.addFile(weapon.name, f'{weapon.name}.html')
-    index.write(os.path.join('tables', 'index.html'))
+    index.write(os.path.join('docs', 'index.html'))
 
 
 
