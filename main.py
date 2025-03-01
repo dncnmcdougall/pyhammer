@@ -130,18 +130,38 @@ if __name__ == "__main__":
         ]
 
 
-    for model in models:
-        for weapon in weapons:
-            for rng in [24]:
-                options = AttackOptions(rng, False)
-                print(f'{weapon.name} at {model.name} at {rng}"')
-                damage = attackRoll(weapon, model, options, True)
+    options = AttackOptions(12, False)
+    for weapon in weapons:
+        table = Table()
+        table.setRows([Heading(f'T {ii}', ii) for ii in range(2,15)])
+        table.setColumns([Heading(f'Sv{ii}+', ii) for ii in range(7,1,-1)])
+        print(weapon.name)
 
-                results = sorted([ (key, prob) for key, prob in damage.outcomes().items() ],key=lambda x: x[1], reverse=True)
 
-                for key, prob in results:
-                    if sum( k.value for k in key.outcomes ) ==0 :
-                        print(f'{(1-prob)*100:.3g}%: {repr(key)}')
+        for cell in table.getFullCellList():
+            model=SimpleModel(f'{cell.row.name}, {cell.column.name}', cell.row.value, cell.column.value, 1, 0)
+            damage = attackRoll(weapon, model, options, True)
+
+            results = damage.outcomes().items()
+            prob_1 = 0
+            prob_2 = 0
+            prob_3 = 0
+            for key, prob in results:
+                damage = sum( k.value for k in key.outcomes )
+                if damage >= 3:
+                    prob_3 += prob
+                if damage >=2:
+                    prob_2 += prob
+                if damage >=1:
+                    prob_1 += prob
+            new_cell = Cell(cell.row, cell.column, CellValue(True, prob_1*100, prob_2*100, prob_3*100))
+
+            table.setCells([new_cell])
+        table.write(os.path.join('/home/duncan/Desktop//tables', f'{weapon.name}.html'), weapon.name, weapon.statLine(), weapon.keywords())
+
+    for ii in range(1,13):
+        models.append(SimpleModel(f"T{ii}", ii, 3, 1, 0))
+
 
 
 
