@@ -56,6 +56,7 @@ def critical() -> Success:
 @dataclass(frozen=True)
 class Outcome:
     value: int
+    roll_value: int
     success: Success
     bypass_next: bool
     reroll: bool
@@ -77,40 +78,23 @@ class Outcome:
             "B" if self.bypass_next else "-",
             "R" if self.reroll else "-",
         ]
-        return f"O({self.value}, {''.join(values)})"
+        return f"O({self.value} [{self.roll_value}], {''.join(values)})"
 
+class dice:
+    def __init__(self, sides: int, addition: int = 0):
+        self.sides = sides
+        self.addition = addition
 
-# @dataclass(frozen=True)
-# class OutcomeTree:
-#     count: float
-#     outcome: Outcome
-#     children: list[Self]
-#
-#     def to_sequences(self) -> dict[OutcomeSequence, float]:
-#         results = {}
-#         if len(self.children) == 0 :
-#             results[OutcomeSequence([self.outcome])] = self.count
-#         else:
-#             total = sum([ c.count for c in self.children ])
-#             for child in self.children:
-#                 child_sequences = child.to_sequences()
-#                 for sequence, count in child_sequences.items():
-#                     this_oc = OutcomeSequence.prepend(self.outcome, sequence)
-#                     this_count = (self.count/total)*count
-#                     if this_oc not in results:
-#                         results[this_oc] = this_count
-#                     else:
-#                         results[this_oc] += this_count
-#         return results
-#
-#     def add_tree_to_leaves(self, tree: list["OutcomeTree"]) -> "OutcomeTree":
-#         if len(self.children) == 0 :
-#             return OutcomeTree(self.count, self.outcome, tree)
-#         else:
-#             return OutcomeTree(self.count, self.outcome, [child.add_tree_to_leaves(tree) for child in self.children])
-#
-#     def summarise(self) -> dict[Outcome, float]:
-#         summaries = defaultdict(lambda: 0.0)
-#         for key, value in self.to_sequences().items():
-#             summaries[key.outcomes[-1]] += value
-#         return summaries
+    def __call__(self) -> list[Outcome]:
+        return [
+            Outcome(1, ii + self.addition, success(), False, False)
+            for ii in range(1, self.sides + 1)
+        ]
+
+    def __str__(self):
+        results = f"d{self.sides}"
+        if self.addition > 0:
+            return f"{results}+{self.addition}"
+        else:
+            return results
+

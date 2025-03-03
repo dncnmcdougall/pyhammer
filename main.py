@@ -13,8 +13,9 @@ from weapon import (
     melta,
     anti,
     twin_linked,
-    dice,
+    critical_hits,
 )
+from outcomes import dice
 from model import SimpleModel
 from table import Table, Heading, Cell, CellValue, Index
 
@@ -235,7 +236,9 @@ if __name__ == "__main__":
             [twin_linked],
         ),
         SimpleWeapon("Necron", "Gauss blaster", 24, 2, 3, 5, -1, 1, [lethal_hits]),
+        SimpleWeapon("Necron", "Gauss blaster C5", 24, 2, 3, 5, -1, 1, [critical_hits(5), lethal_hits]),
         SimpleWeapon("Necron", "Tesla carbine", 24, 2, 3, 5, 0, 1, [sustained_hits(2)]),
+        SimpleWeapon("Necron", "Tesla carbine C5", 24, 2, 3, 5, 0, 1, [critical_hits(5), sustained_hits(2)]),
     ]
 
     options = AttackOptions(12, False)

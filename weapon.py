@@ -2,7 +2,7 @@ import functools
 from typing import Callable, ParamSpec, TypeVar
 from dataclasses import dataclass, field
 
-from outcomes import Outcome
+from outcomes import Outcome, dice
 import outcomes as oc
 
 from icecream import ic
@@ -11,7 +11,6 @@ P = ParamSpec("P")
 R = TypeVar("R")
 
 RollFunc = Callable[P, list[Outcome]]
-
 
 def modify(roll: str) -> Callable[[RollFunc], RollFunc]:
     def dec(func: RollFunc) -> RollFunc:
@@ -27,31 +26,10 @@ def modify(roll: str) -> Callable[[RollFunc], RollFunc]:
 
     return dec
 
-
 @dataclass
 class AttackOptions:
     rng: int
     cover: bool
-
-
-class dice:
-    def __init__(self, sides: int, addition: int = 0):
-        self.sides = sides
-        self.addition = addition
-
-    def __call__(self, options: AttackOptions) -> list[Outcome]:
-        return [
-            Outcome(ii + self.addition, oc.success(), False, False)
-            for ii in range(1, self.sides + 1)
-        ]
-
-    def __str__(self):
-        results = f"d{self.sides}"
-        if self.addition > 0:
-            return f"{results}+{self.addition}"
-        else:
-            return results
-
 
 @dataclass
 class SimpleWeapon:
@@ -75,37 +53,37 @@ class SimpleWeapon:
     @modify("attack")
     def attack(self, options: AttackOptions) -> list[Outcome]:
         if isinstance(self.A, dice):
-            return self.A(options)
+            return [ Outcome(o.roll_value, o.roll_value, o.success, o.bypass_next, o.reroll) for o in self.A() ]
         else:
-            return [Outcome(self.A, oc.success(), False, False)]
+            return [Outcome(self.A, -1, oc.success(), False, False)]
 
     @modify("hit")
     def hit(self, options: AttackOptions) -> list[Outcome]:
         return [
-            Outcome(1, oc.failure(), False, False),
-            Outcome(1, oc.success(2 >= self.WS), False, False),
-            Outcome(1, oc.success(3 >= self.WS), False, False),
-            Outcome(1, oc.success(4 >= self.WS), False, False),
-            Outcome(1, oc.success(5 >= self.WS), False, False),
-            Outcome(1, oc.critical(), False, False),
+            Outcome(1, 1, oc.failure(), False, False),
+            Outcome(1, 2, oc.success(2 >= self.WS), False, False),
+            Outcome(1, 3, oc.success(3 >= self.WS), False, False),
+            Outcome(1, 4, oc.success(4 >= self.WS), False, False),
+            Outcome(1, 5, oc.success(5 >= self.WS), False, False),
+            Outcome(1, 6, oc.critical(), False, False),
         ]
 
     @modify("wound")
     def wound(self, target_toughness: int, options: AttackOptions) -> list[Outcome]:
         return [
-            Outcome(1, oc.failure(), False, False),
-            Outcome(2, oc.success(self.S > 2 * target_toughness), False, False),
-            Outcome(3, oc.success(self.S > target_toughness), False, False),
-            Outcome(4, oc.success(self.S >= target_toughness), False, False),
-            Outcome(5, oc.success(2 * self.S > target_toughness), False, False),
-            Outcome(6, oc.critical(), False, False),
+            Outcome(1, 1, oc.failure(), False, False),
+            Outcome(1, 2, oc.success(self.S > 2 * target_toughness), False, False),
+            Outcome(1, 3, oc.success(self.S > target_toughness), False, False),
+            Outcome(1, 4, oc.success(self.S >= target_toughness), False, False),
+            Outcome(1, 5, oc.success(2 * self.S > target_toughness), False, False),
+            Outcome(1, 6, oc.critical(), False, False),
         ]
 
     @modify("damage")
     def damage(self, options: AttackOptions) -> list[Outcome]:
         if callable(self.D):
-            return self.D(options)
-        return [Outcome(self.D, oc.success(), False, False)]
+            return [ Outcome(o.roll_value, o.roll_value, o.success, o.bypass_next, o.reroll) for o in self.D() ]
+        return [Outcome(self.D, -1, oc.success(), False, False)]
 
     def __str__(self) -> str:
         return f"{self.name}: A {self.A}, WS {self.WS}+, S {self.S}, AP -{self.AP}, D {self.D}"
@@ -140,7 +118,7 @@ def modifier(roll: str) -> Callable[[Modifier], Modifier]:
 def torrent(
     weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]
 ) -> list[Outcome]:
-    return [Outcome(o.value, o.success, bool(o.success), o.reroll) for o in outcomes]
+    return [Outcome(o.value, o.roll_value, o.success, bool(o.success), o.reroll) for o in outcomes]
 
 
 def rapid_fire(amount: int) -> AttackModifier:
@@ -150,7 +128,7 @@ def rapid_fire(amount: int) -> AttackModifier:
     ) -> list[Outcome]:
         if options.rng * 2 <= weapon.R:
             return [
-                Outcome(o.value + amount, o.success, o.bypass_next, o.reroll)
+                Outcome(o.value + amount, o.roll_value, o.success, o.bypass_next, o.reroll)
                 for o in outcomes
             ]
         else:
@@ -169,6 +147,7 @@ def sustained_hits(count: int) -> Modifier:
         return [
             Outcome(
                 o.value + (count if o.success.critical() else 0),
+                o.roll_value,
                 o.success,
                 o.bypass_next,
                 o.reroll,
@@ -177,8 +156,25 @@ def sustained_hits(count: int) -> Modifier:
         ]
 
     update.__name__ = f"sustained_hits_{count}"
-    ic(update)
-    ic(update.__name__)
+    return update
+
+def critical_hits(count: int) -> Modifier:
+    @modifier("hit")
+    def update(
+        weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]
+    ) -> list[Outcome]:
+        return [
+            Outcome(
+                o.value,
+                o.roll_value,
+                o.success if o.roll_value < count else oc.critical(),
+                o.bypass_next,
+                o.reroll,
+            )
+            for o in outcomes
+        ]
+
+    update.__name__ = f"critical_hits_{count}"
 
     return update
 
@@ -188,7 +184,7 @@ def lethal_hits(
     weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]
 ) -> list[Outcome]:
     return [
-        Outcome(o.value, o.success, o.success.critical() or o.bypass_next, o.reroll)
+        Outcome(o.value, o.roll_value, o.success, o.success.critical() or o.bypass_next, o.reroll)
         for o in outcomes
     ]
 
@@ -201,7 +197,7 @@ def devestating_wounds(
     outcomes: list[Outcome],
 ) -> list[Outcome]:
     return [
-        Outcome(o.value, o.success, o.success.critical() or o.bypass_next, o.reroll)
+        Outcome(o.value, o.roll_value, o.success, o.success.critical() or o.bypass_next, o.reroll)
         for o in outcomes
     ]
 
@@ -214,7 +210,7 @@ def twin_linked(
     outcomes: list[Outcome],
 ) -> list[Outcome]:
     return [
-        Outcome(o.value, o.success, o.success.critical() or o.bypass_next, True)
+        Outcome(o.value, o.roll_value, o.success, o.success.critical() or o.bypass_next, True)
         for o in outcomes
     ]
 
@@ -230,6 +226,7 @@ def anti(amount: int) -> WoundModifier:
         return [
             Outcome(
                 o.value,
+                o.roll_value,
                 oc.critical() if o.value >= amount else o.success,
                 o.bypass_next,
                 o.reroll,
@@ -249,7 +246,7 @@ def melta(count: int) -> Modifier:
     ) -> list[Outcome]:
         if options.rng * 2 <= weapon.R:
             return [
-                Outcome(o.value + count, o.success, o.bypass_next, o.reroll)
+                Outcome(o.value + count, o.roll_value, o.success, o.bypass_next, o.reroll)
                 for o in outcomes
             ]
         else:
