@@ -4,16 +4,18 @@ from typing import Type, TypeVar, Self
 
 from dataclasses import dataclass
 
-T = TypeVar('T')
+T = TypeVar("T")
+
 
 def collect(items: list[T]) -> dict[T, int]:
-        collection = {}
-        for item in items:
-            if item not in collection:
-                collection[item] = 1
-            else:
-                collection[item] += 1
-        return collection
+    collection = {}
+    for item in items:
+        if item not in collection:
+            collection[item] = 1
+        else:
+            collection[item] += 1
+    return collection
+
 
 class Success(Enum):
     FAILURE = 0
@@ -36,16 +38,20 @@ class Success(Enum):
     def __repr__(self) -> str:
         return self.name
 
+
 def failure() -> Success:
     return Success.FAILURE
+
 
 def success(value: bool = True) -> Success:
     if value:
         return Success.SUCCESS
     return Success.FAILURE
 
+
 def critical() -> Success:
     return Success.CRITICAL
+
 
 @dataclass(frozen=True)
 class Outcome:
@@ -68,8 +74,8 @@ class Outcome:
     def __repr__(self) -> str:
         values = [
             repr(self.success)[0],
-            'B' if self.bypass_next else '-',
-            'R' if self.reroll else '-',
+            "B" if self.bypass_next else "-",
+            "R" if self.reroll else "-",
         ]
         return f"O({self.value}, {''.join(values)})"
 
@@ -96,7 +102,7 @@ class Outcome:
 #                     else:
 #                         results[this_oc] += this_count
 #         return results
-#     
+#
 #     def add_tree_to_leaves(self, tree: list["OutcomeTree"]) -> "OutcomeTree":
 #         if len(self.children) == 0 :
 #             return OutcomeTree(self.count, self.outcome, tree)
@@ -108,7 +114,3 @@ class Outcome:
 #         for key, value in self.to_sequences().items():
 #             summaries[key.outcomes[-1]] += value
 #         return summaries
-
-
-
-
