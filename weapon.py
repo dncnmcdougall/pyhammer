@@ -137,6 +137,7 @@ def rapid_fire(amount:int) -> AttackModifier:
             return [ Outcome(o.value + amount , o.success, o.bypass_next, o.reroll) for o in outcomes ]
         else:
             return outcomes
+    setattr(update, __name__, f'rapid_file_{amount}')
 
     return update
 
@@ -145,6 +146,10 @@ def sustained_hits(count:int) -> Modifier:
     @modifier('hit')
     def update(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
         return [ Outcome(o.value + (count if o.success.critical() else 0), o.success, o.bypass_next, o.reroll) for o in outcomes ]
+
+    update.__name__ = f'sustained_hits_{count}'
+    ic(update)
+    ic(update.__name__)
 
     return update
 
@@ -167,6 +172,8 @@ def anti(amount:int) -> WoundModifier:
     def update(weapon: SimpleWeapon, target_toughtness:int, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
         return [ Outcome(o.value , oc.critical() if o.value >= amount else o.success, o.bypass_next, o.reroll) for o in outcomes ]
 
+    setattr(update, __name__, f'anti_{amount}')
+
     return update
 
 def melta(count:int) -> Modifier:
@@ -177,6 +184,7 @@ def melta(count:int) -> Modifier:
             return [ Outcome(o.value + count, o.success, o.bypass_next, o.reroll) for o in outcomes ]
         else:
             return outcomes
+    setattr(update, __name__, f'melta_{amount}')
 
     return update
 

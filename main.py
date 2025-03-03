@@ -128,7 +128,7 @@ if __name__ == "__main__":
         SimpleWeapon("Deathwatch Combat Patrol", "Twin power fists", 1, 3, 4, 8,-2,2, [twin_linked] ),
 
         SimpleWeapon("Necron", "Gauss blaster", 24, 2, 3, 5,-1,1, [lethal_hits] ),
-        SimpleWeapon("Necron", "Tesla carbine", 24, 2, 5, 5,0,1, [sustained_hits(2)] ),
+        SimpleWeapon("Necron", "Tesla carbine", 24, 2, 3, 5,0,1, [sustained_hits(2)] ),
         ]
 
     options = AttackOptions(12, False)
@@ -161,7 +161,7 @@ if __name__ == "__main__":
 
         filename = os.path.join( weapon.folder, f'{weapon.name}.html')
         table.write(os.path.join('docs', filename), weapon.name, weapon.statLine(), weapon.keywords())
-        index.addFile(weapon.name, filename)
+        index.addFile(weapon.folder, weapon.name, filename=filename)
     index.write(os.path.join('docs', 'index.html'))
 
 

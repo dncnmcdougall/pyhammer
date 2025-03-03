@@ -1,3 +1,4 @@
+from typing import Any
 from dataclasses import dataclass, field
 from icecream import ic
 
@@ -175,8 +176,28 @@ class Index:
     def __init__(self):
         self.items = {}
 
-    def addFile(self, name, filename):
-        self.items[name] = filename
+    def addFile(self, *name_parts, filename):
+        d= self.items
+        total = len(name_parts)
+        assert total > 0
+        for ii,name in enumerate(name_parts):
+            if ii == total-1:
+                d[name] = filename
+            elif name not in d:
+                d[name] = {}
+            d = d[name]
+
+    def write_list(self, fle, name:str, name_depth:int, values: dict[str,Any]) -> None:
+        fle.write('<section>\n')
+        fle.write(f'<h{name_depth}>{name}</h{name_depth}>\n')
+        fle.write('<ul>\n')
+        for key, value in values.items():
+            if isinstance(value, dict):
+                self.write_list(fle, key, name_depth+1, value)
+            else:
+                fle.write(f'<li><a href="{value}">{key}</a></li>\n')
+        fle.write('</ul>\n')
+        fle.write('</section>\n')
 
     def write(self, filename):
         with open(filename,'w') as fle:
@@ -186,10 +207,7 @@ class Index:
             <meta http-equiv="content-type" content="text/html; charset=UTF-8">
             <body>
             ''')
-            fle.write('<ul>\n')
-            for name, filename in self.items.items():
-                fle.write(f'<li><a href="{filename}">{name}</a></li>\n')
-            fle.write('</ul>\n')
+            self.write_list(fle, "All", 1, self.items)
             fle.write('</body>\n')
 
 
