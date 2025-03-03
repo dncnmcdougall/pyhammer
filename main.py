@@ -103,29 +103,32 @@ def attackRoll(weapon:SimpleWeapon, target:SimpleModel, options:AttackOptions, r
 if __name__ == "__main__":
 
     weapons = [
-        SimpleWeapon("Tachyon arrow", 72, 1, 2, 16,-5,dice(6,2)),
-        SimpleWeapon("Overlord's blade", 1, 4, 2, 8,-3,2, [devestating_wounds]),
-        SimpleWeapon("Gauss flayer", 24, 1, 4, 4,0,1, [lethal_hits] ),
-        SimpleWeapon("Gauss reaper", 12, 2, 4, 5,-1,1, [lethal_hits] ),
-        SimpleWeapon("Warrior CCW", 1, 1, 4, 4,0,1 ),
-        SimpleWeapon("Skorpekh hyperphase weapons", 1, 4, 3, 7,-2,2 ),
-        SimpleWeapon("Feeder mandibles", 1, 6, 5, 2,0,1 ),
-        SimpleWeapon("Doomsday blaster", 48, dice(6,1), 4, 14,-3,3 ),
-        SimpleWeapon("Twin gauss flayer", 24, 1, 4, 4,0,1, [lethal_hits, twin_linked ] ),
-        SimpleWeapon("Doom stalker limbs", 1, 3, 4, 6,0,1 ),
+        SimpleWeapon("Necron Combat Patrol", "Tachyon arrow", 72, 1, 2, 16,-5,dice(6,2)),
+        SimpleWeapon("Necron Combat Patrol", "Overlord's blade", 1, 4, 2, 8,-3,2, [devestating_wounds]),
+        SimpleWeapon("Necron Combat Patrol", "Gauss flayer", 24, 1, 4, 4,0,1, [lethal_hits] ),
+        SimpleWeapon("Necron Combat Patrol", "Gauss reaper", 12, 2, 4, 5,-1,1, [lethal_hits] ),
+        SimpleWeapon("Necron Combat Patrol", "Warrior CCW", 1, 1, 4, 4,0,1 ),
+        SimpleWeapon("Necron Combat Patrol", "Skorpekh hyperphase weapons", 1, 4, 3, 7,-2,2 ),
+        SimpleWeapon("Necron Combat Patrol", "Feeder mandibles", 1, 6, 5, 2,0,1 ),
+        SimpleWeapon("Necron Combat Patrol", "Doomsday blaster", 48, dice(6,1), 4, 14,-3,3 ),
+        SimpleWeapon("Necron Combat Patrol", "Twin gauss flayer", 24, 1, 4, 4,0,1, [lethal_hits, twin_linked ] ),
+        SimpleWeapon("Necron Combat Patrol", "Doom stalker limbs", 1, 3, 4, 6,0,1 ),
 
-        SimpleWeapon("Lietenant Bolt pistol", 12, 1, 2, 4,0,1 ),
-        SimpleWeapon("Master crafted power weapon", 1, 5, 2, 5,-2,2 ),
-        SimpleWeapon("Absolvor bolt pistol", 18, 1, 3, 5,-1,2 ),
-        SimpleWeapon("Reductor pistol", 3, 1, 3, 4,-4,2 ),
-        SimpleWeapon("Appotheecary CCW", 1, 4, 3, 4,0,1 ),
-        SimpleWeapon("Astartes grenade launcher - frag", 24, dice(3), 3, 4,0,1 ),
-        SimpleWeapon("Astartes grenade launcher - krak", 24, 1, 3, 9,-2,dice(3) ),
-        SimpleWeapon("Bolt pistol", 12, 1, 3, 4,0,1 ),
-        SimpleWeapon("Bolt rifle", 24, 2, 3, 4,-1,1 ),
-        SimpleWeapon("Intercessor CCW", 1, 3, 3, 4,0,1 ),
-        SimpleWeapon("Flamestorm gauntlets", 12, dice(6,1), 0, 4,0,1, [torrent, twin_linked] ),
-        SimpleWeapon("Twin power fists", 1, 3, 4, 8,-2,2, [twin_linked] ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Lietenant Bolt pistol", 12, 1, 2, 4,0,1 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Master crafted power weapon", 1, 5, 2, 5,-2,2 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Absolvor bolt pistol", 18, 1, 3, 5,-1,2 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Reductor pistol", 3, 1, 3, 4,-4,2 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Appotheecary CCW", 1, 4, 3, 4,0,1 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Astartes grenade launcher - frag", 24, dice(3), 3, 4,0,1 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Astartes grenade launcher - krak", 24, 1, 3, 9,-2,dice(3) ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Bolt pistol", 12, 1, 3, 4,0,1 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Bolt rifle", 24, 2, 3, 4,-1,1 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Intercessor CCW", 1, 3, 3, 4,0,1 ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Flamestorm gauntlets", 12, dice(6,1), 0, 4,0,1, [torrent, twin_linked] ),
+        SimpleWeapon("Deathwatch Combat Patrol", "Twin power fists", 1, 3, 4, 8,-2,2, [twin_linked] ),
+
+        SimpleWeapon("Necron", "Gauss blaster", 24, 2, 3, 5,-1,1, [lethal_hits] ),
+        SimpleWeapon("Necron", "Tesla carbine", 24, 2, 5, 5,0,1, [sustained_hits(2)] ),
         ]
 
     options = AttackOptions(12, False)
@@ -153,8 +156,12 @@ if __name__ == "__main__":
             new_cell = Cell(cell.row, cell.column, CellValue(True, [ v*100 for v in values]))
 
             table.setCells([new_cell])
-        table.write(os.path.join('docs', f'{weapon.name}.html'), weapon.name, weapon.statLine(), weapon.keywords())
-        index.addFile(weapon.name, f'{weapon.name}.html')
+        if not os.path.exists(os.path.join('docs', weapon.folder)):
+            os.mkdir(os.path.join('docs', weapon.folder))
+
+        filename = os.path.join( weapon.folder, f'{weapon.name}.html')
+        table.write(os.path.join('docs', filename), weapon.name, weapon.statLine(), weapon.keywords())
+        index.addFile(weapon.name, filename)
     index.write(os.path.join('docs', 'index.html'))
 
 

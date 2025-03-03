@@ -49,6 +49,7 @@ class dice:
 
 @dataclass
 class SimpleWeapon:
+    folder: str
     name: str
     R: int
     A: int|dice
