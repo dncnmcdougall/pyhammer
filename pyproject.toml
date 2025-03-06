@@ -8,3 +8,10 @@ dependencies = [
     "icecream>=2.1.4",
     "ruff>=0.9.7",
 ]
+
+[tool.ruff]
+indent-width=4
+line-length=120
+
+[tool.ruff.lint]
+select=["E","F","N", "B"]

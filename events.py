@@ -1,10 +1,7 @@
-from typing import Self, Any
 from collections import defaultdict
-from enum import Enum
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-from icecream import ic
 
 Probability = float
 
@@ -87,9 +84,7 @@ class EventsKey:
 
 
 class EventSet(ABC):
-    def __init__(
-        self, events: list["EventSet"], name="", probability: Probability = 1.0
-    ):
+    def __init__(self, events: list["EventSet"], name="", probability: Probability = 1.0):
         self.events = events
         self.name = name
         self.probability = probability
@@ -108,9 +103,7 @@ class EventSet(ABC):
 
 
 class Leaf(EventSet):
-    def __init__(
-        self, name: str, outcome: EventSuccess, probability: Probability = 1.0
-    ):
+    def __init__(self, name: str, outcome: EventSuccess, probability: Probability = 1.0):
         super().__init__([], name=name, probability=probability)
         self.outcome = outcome
 
@@ -139,9 +132,7 @@ class All(EventSet):
                 new_outcomes = []
                 for prob, key in outcomes:
                     for this_key, this_prob in set_outcomes.items():
-                        new_outcomes.append(
-                            (prob * this_prob, EventsKey.join(key, this_key))
-                        )
+                        new_outcomes.append((prob * this_prob, EventsKey.join(key, this_key)))
                 outcomes = new_outcomes
         outcome_map = defaultdict(float)
         for prob, key in outcomes:

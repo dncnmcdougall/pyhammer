@@ -1,6 +1,5 @@
 from typing import Any
 from dataclasses import dataclass, field
-from icecream import ic
 
 
 @dataclass(frozen=True)
@@ -34,13 +33,13 @@ class Table:
         self.level_n = 4
         self.damage_n = 5
 
-    def setColumns(self, columns: list[Heading]) -> None:
+    def set_columns(self, columns: list[Heading]) -> None:
         self.columns = columns
 
-    def setRows(self, rows: list[Heading]) -> None:
+    def set_rows(self, rows: list[Heading]) -> None:
         self.rows = rows
 
-    def getFullCellList(self) -> list[Cell]:
+    def get_full_cell_list(self) -> list[Cell]:
         results = []
         for row in self.rows:
             for col in self.columns:
@@ -50,7 +49,7 @@ class Table:
                     results.append(Cell(row, col, CellValue(is_set=False)))
         return results
 
-    def setCells(self, cells: list[Cell]) -> None:
+    def set_cells(self, cells: list[Cell]) -> None:
         for cell in cells:
             if not cell.value.is_set:
                 continue
@@ -58,7 +57,7 @@ class Table:
                 self.cells[cell.row] = {}
             self.cells[cell.row][cell.column] = cell
 
-    def _cellItem(self, value: float, cls: str) -> str:
+    def _cell_item(self, value: float, cls: str) -> str:
         cls_suffix = ""
         step = 100 / self.level_n
         for ii in range(self.level_n):
@@ -88,9 +87,7 @@ class Table:
 
                 for jj in range(self.level_n):
                     fle.write(f".val{ii + 1}_{jj + 1} {{\n")
-                    fle.write(
-                        f"background: hsl({hues[ii]}, 100%, {100 - (jj) * step}%);\n"
-                    )
+                    fle.write(f"background: hsl({hues[ii]}, 100%, {100 - (jj) * step}%);\n")
                     fle.write("}\n")
                     fle.write("\n")
             fle.write("</style>\n")
@@ -107,9 +104,10 @@ class Table:
                 else:
                     fle.write("<th></th>\n")
                 if ii < self.damage_n:
-                    fle.write(
-                        f'<td>Show {ii + 1}+ damage<input type="checkbox" id="val{ii + 1}" {"checked" if ii == 0 else ""} oninput="changeFunc(event)"/></td>\n'
-                    )
+                    state = "checked" if ii == 0 else ""
+                    num = ii + 1
+                    fle.write(f'<td>Show {num}+ damage<input type="checkbox" id="val{num}"')
+                    fle.write(f'{state} oninput="changeFunc(event)"/></td>\n')
                 else:
                     fle.write("<td></td>\n")
                 fle.write("</tr>\n")
@@ -123,7 +121,7 @@ class Table:
                 fle.write(f'<th class="main_heading" colspan=1>{column.name}</th>\n')
             fle.write("</tr>\n")
             fle.write("<th></th>\n")
-            for column in self.columns:
+            for _ in self.columns:
                 for ii in range(self.damage_n):
                     fle.write(f'<th class="val{ii + 1}">{ii + 1}+</th>\n')
             fle.write("</tr>\n")
@@ -136,9 +134,7 @@ class Table:
                             fle.write(f'<td class="val{ii + 1}">-</td>\n')
                     else:
                         for ii in range(self.damage_n):
-                            fle.write(
-                                self._cellItem(cell.value.values[ii], f"val{ii + 1}")
-                            )
+                            fle.write(self._cell_item(cell.value.values[ii], f"val{ii + 1}"))
                 fle.write("</tr>\n")
             fle.write("</table>\n")
 
@@ -178,7 +174,7 @@ class Index:
     def __init__(self):
         self.items = {}
 
-    def addFile(self, *name_parts, filename):
+    def add_file(self, *name_parts, filename):
         d = self.items
         total = len(name_parts)
         assert total > 0
@@ -189,9 +185,7 @@ class Index:
                 d[name] = {}
             d = d[name]
 
-    def write_list(
-        self, fle, name: str, name_depth: int, values: dict[str, Any]
-    ) -> None:
+    def write_list(self, fle, name: str, name_depth: int, values: dict[str, Any]) -> None:
         fle.write("<section>\n")
         fle.write(f"<h{name_depth}>{name}</h{name_depth}>\n")
         fle.write("<ul>\n")

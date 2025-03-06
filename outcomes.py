@@ -1,6 +1,5 @@
-from collections import defaultdict
 from enum import Enum
-from typing import Type, TypeVar, Self
+from typing import TypeVar
 
 from dataclasses import dataclass
 
@@ -80,16 +79,14 @@ class Outcome:
         ]
         return f"O({self.value} [{self.roll_value}], {''.join(values)})"
 
-class dice:
+
+class Dice:
     def __init__(self, sides: int, addition: int = 0):
         self.sides = sides
         self.addition = addition
 
     def __call__(self) -> list[Outcome]:
-        return [
-            Outcome(1, ii + self.addition, success(), False, False)
-            for ii in range(1, self.sides + 1)
-        ]
+        return [Outcome(1, ii + self.addition, success(), False, False) for ii in range(1, self.sides + 1)]
 
     def __str__(self):
         results = f"d{self.sides}"
@@ -98,3 +95,14 @@ class dice:
         else:
             return results
 
+    @staticmethod
+    def from_str(s: str) -> "Dice":
+        parts = [p.strip() for p in s.split("+")]
+        assert (len(parts) >= 1) and (len(parts) <= 2)
+        assert parts[0][0].lower() == "d"
+        sides = int(parts[0][1:])
+        if len(parts) > 1:
+            addition = int(parts[1])
+        else:
+            addition = 0
+        return Dice(sides, addition)
