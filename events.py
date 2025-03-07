@@ -84,7 +84,7 @@ class EventsKey:
 
 
 class EventSet(ABC):
-    def __init__(self, events: list["EventSet"], name="", probability: Probability = 1.0):
+    def __init__(self, events: tuple["EventSet", ...], name="", probability: Probability = 1.0):
         self.events = events
         self.name = name
         self.probability = probability
@@ -104,7 +104,7 @@ class EventSet(ABC):
 
 class Leaf(EventSet):
     def __init__(self, name: str, outcome: EventSuccess, probability: Probability = 1.0):
-        super().__init__([], name=name, probability=probability)
+        super().__init__(tuple(), name=name, probability=probability)
         self.outcome = outcome
 
     def _title(self) -> str:
@@ -154,5 +154,6 @@ class Together(EventSet):
             for key, prob in event_outcomes.items():
                 outcome_map[key.summarise()] += prob * fractional_probability
 
-        assert abs(sum(outcome_map.values()) - 1) < 1e-7
+        if abs(sum(outcome_map.values()) - 1) > 1e-7:
+            raise ValueError(f"Expected outcome ({abs(sum(outcome_map.values()) - 1)}) to be < 1e-7")
         return outcome_map

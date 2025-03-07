@@ -1,19 +1,10 @@
 import os
 from dataclasses import dataclass, field
+from icecream import ic
 
 
 from weapon import SimpleWeapon, AttackOptions, RollFunc
-from weapon import (
-    torrent,
-    sustained_hits,
-    lethal_hits,
-    devastating_wounds,
-    twin_linked,
-    critical_hits,
-    rapid_fire,
-    precision,
-    blast,
-)
+import weapon as wp
 from outcomes import Dice
 from model import SimpleModel
 from table import Table, Heading, Cell, CellValue, Index
@@ -48,17 +39,22 @@ class DataLine:
         else:
             damage = int(parts[7])
 
-        return DataLine(
-            unit=parts[0],
-            weapon_name=parts[1],
-            rng=int(parts[2]),
-            attacks=attacks,
-            weapon_skill=int(parts[4]),
-            strength=int(parts[5]),
-            armour_penetration=int(parts[6]),
-            damage=damage,
-            modifiers=parts[8:],
-        )
+        try:
+            return DataLine(
+                unit=parts[0],
+                weapon_name=parts[1],
+                rng=int(parts[2]),
+                attacks=attacks,
+                weapon_skill=int(parts[4]),
+                strength=int(parts[5]),
+                armour_penetration=int(parts[6]),
+                damage=damage,
+                modifiers=parts[8:],
+            )
+        except:
+            ic(line)
+            ic(parts)
+            raise
 
     def create_weapon(self, modifier_map: dict[str, RollFunc]) -> SimpleWeapon:
         modifiers = []
@@ -73,7 +69,7 @@ class DataLine:
             self.strength,
             self.armour_penetration,
             self.damage,
-            modifiers,
+            tuple(modifiers),
         )
 
     def create_weapon_and_table(
@@ -125,19 +121,23 @@ class DataFile:
 
 if __name__ == "__main__":
     modifier_funcs = [
-        torrent,
-        sustained_hits(1),
-        sustained_hits(2),
-        rapid_fire(1),
-        rapid_fire(2),
-        rapid_fire(3),
-        lethal_hits,
-        devastating_wounds,
-        twin_linked,
-        critical_hits(4),
-        critical_hits(5),
-        precision,
-        blast,
+        wp.torrent,
+        wp.sustained_hits(1),
+        wp.sustained_hits(2),
+        wp.rapid_fire(1),
+        wp.rapid_fire(2),
+        wp.rapid_fire(3),
+        wp.lethal_hits,
+        wp.devastating_wounds,
+        wp.twin_linked,
+        wp.critical_hits(4),
+        wp.critical_hits(5),
+        wp.precision,
+        wp.blast,
+        wp.pistol,
+        wp.hazardous,
+        wp.ignores_cover,
+        wp.melta(4),
     ]
     modifier_map = {func.__name__.lower().replace("_", " "): func for func in modifier_funcs}
 

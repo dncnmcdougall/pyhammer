@@ -3,7 +3,7 @@ from outcomes import Outcome
 import outcomes as oc
 
 
-@dataclass
+@dataclass(frozen=True)
 class SimpleModel:
     name: str
     T: int

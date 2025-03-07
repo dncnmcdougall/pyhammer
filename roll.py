@@ -1,4 +1,5 @@
 from events import EventSet, EventSuccess
+from functools import cache
 
 import events as ev
 
@@ -6,14 +7,16 @@ from model import SimpleModel
 from weapon import SimpleWeapon, AttackOptions
 
 
+@cache
 def feelNoPainRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions, reroll: bool) -> ev.Together:
     # Like the save throw, a successful FNP means a failure to damage. i.e. negation
     results: list[EventSet] = [
         ev.Leaf("dmg", suc) for suc in [ev.failure() if fnp.success else ev.success() for fnp in target.feel_no_pain()]
     ]
-    return ev.Together(results, name="fnp")
+    return ev.Together(tuple(results), name="fnp")
 
 
+@cache
 def damageRoll(
     weapon: SimpleWeapon,
     target: SimpleModel,
@@ -27,19 +30,20 @@ def damageRoll(
         for _ in range(damage.value):
             possible_damage.append(feelNoPainRoll(weapon, target, options, True))
 
-        all = ev.All(possible_damage)
+        all = ev.All(tuple(possible_damage))
 
         res = []
         for key, prob in all.outcomes().items():
             success = EventSuccess(sum(k.value for k in key.outcomes), spill=spill)
             res.append(ev.Leaf("a", success, probability=prob))
-        results.append(ev.Together(res))
+        results.append(ev.Together(tuple(res)))
 
         # results.append(ev.All(possible_damage, name="d"))
 
-    return ev.Together(results, name="dr")
+    return ev.Together(tuple(results), name="dr")
 
 
+@cache
 def saveRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions, reroll: bool) -> ev.Together:
     results: list[EventSet] = []
     for save in target.save(weapon.AP):
@@ -49,9 +53,10 @@ def saveRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions, 
             results.append(saveRoll(weapon, target, options, False))
         else:
             results.append(damageRoll(weapon, target, options, True, False))
-    return ev.Together(results, name="sr")
+    return ev.Together(tuple(results), name="sr")
 
 
+@cache
 def woundRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions, reroll: bool) -> ev.Together:
     results: list[EventSet] = []
     for wound in weapon.wound(target.T, options):
@@ -63,9 +68,10 @@ def woundRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions,
             results.append(woundRoll(weapon, target, options, False))
         else:
             results.append(ev.Leaf("w-f", ev.failure()))
-    return ev.Together(results, name="wr")
+    return ev.Together(tuple(results), name="wr")
 
 
+@cache
 def hitRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions, reroll: bool) -> ev.Together:
     results: list[EventSet] = []
     for hit in weapon.hit(options):
@@ -73,19 +79,20 @@ def hitRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions, r
             possible_hits: list[EventSet] = []
             for _ in range(hit.value):
                 possible_hits.append(saveRoll(weapon, target, options, True))
-            results.append(ev.All(possible_hits, name="h-b"))
+            results.append(ev.All(tuple(possible_hits), name="h-b"))
         elif hit.success:
             possible_hits: list[EventSet] = []
             for _ in range(hit.value):
                 possible_hits.append(woundRoll(weapon, target, options, True))
-            results.append(ev.All(possible_hits, name="h-s"))
+            results.append(ev.All(tuple(possible_hits), name="h-s"))
         elif hit.reroll and reroll:
             results.append(hitRoll(weapon, target, options, False))
         else:
             results.append(ev.Leaf("h-f", ev.failure()))
-    return ev.Together(results, name="hr")
+    return ev.Together(tuple(results), name="hr")
 
 
+@cache
 def attackRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions, reroll: bool) -> ev.EventSet:
     results: list[EventSet] = []
     for attack in weapon.attack(options):
@@ -103,4 +110,4 @@ def attackRoll(weapon: SimpleWeapon, target: SimpleModel, options: AttackOptions
             results.append(attackRoll(weapon, target, options, False))
         else:
             results.append(ev.Leaf("attack", ev.failure()))
-    return ev.Together(results, name="ar")
+    return ev.Together(tuple(results), name="ar")

@@ -27,13 +27,13 @@ def modify(roll: str) -> Callable[[RollFunc], RollFunc]:
     return dec
 
 
-@dataclass
+@dataclass(frozen=True)
 class AttackOptions:
     rng: int
     cover: bool
 
 
-@dataclass
+@dataclass(frozen=True)
 class SimpleWeapon:
     name: str
     R: int
@@ -43,7 +43,7 @@ class SimpleWeapon:
     AP: int
     D: int | Dice
 
-    modifiers: list[RollFunc] = field(default_factory=list)
+    modifiers: tuple[RollFunc]
 
     def stat_line(self) -> str:
         return f'R:{self.R}" A:{self.A} WS:{self.WS} S:{self.S} AP:{self.AP} D:{self.D}'
@@ -111,6 +111,21 @@ def modifier(roll: str) -> Callable[[Modifier], Modifier]:
         return func
 
     return modify
+
+
+@modifier("null")
+def ignores_cover(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
+    return outcomes
+
+
+@modifier("null")
+def hazardous(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
+    return outcomes
+
+
+@modifier("null")
+def pistol(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
+    return outcomes
 
 
 @modifier("null")
@@ -254,7 +269,7 @@ def anti(amount: int) -> WoundModifier:
             for o in outcomes
         ]
 
-    setattr(update, __name__, f"anti_{amount}")
+    update.__name__ = f"anti_{amount}"
 
     return update
 
@@ -267,6 +282,6 @@ def melta(count: int) -> Modifier:
         else:
             return outcomes
 
-    setattr(update, __name__, f"melta_{count}")
+    update.__name__ = f"melta_{count}"
 
     return update
