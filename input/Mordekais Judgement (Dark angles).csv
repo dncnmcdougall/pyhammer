@@ -1,0 +1,16 @@
+Unit,Weapon,Range,Attacks,Skill,Strength,AP,Damage,Modifier 1,Modifier 2,Modifier 3
+Chaplain,Absolver bolt pistol ,18,1,3,5,-1,2,Pistol,,
+Chaplain,Crozius arcanum,0,5,2,6,-1,2,,,
+Inceptor,Assault bolters,18,3,3,5,-1,2,Pistol,Sustained Hits 2,Twin-Linked
+Inceptor,Close Combat,0,3,3,4,0,1,,,
+Intercessor,Bolt pistol ,12,1,3,4,0,1,Pistol,,
+Intercessor,Bolt rifle,24,2,2,4,-1,1,,,
+Intercessor,Bolt rifle (Moved),24,2,3,4,-1,1,,,
+Intercessor,Close Combat,0,3,3,4,0,1,,,
+Intercessor,Power weapon,0,4,3,5,-2,1,,,
+Redemptor Dreadnought,Icarus rocket pod,24,D3,3,8,-1,2,,,
+Redemptor Dreadnought,Macro plasma incinerator - standard,36,D6+1,3,8,-3,2,Blast,,
+Redemptor Dreadnought,Macro plasma incinerator - supercharge,36,D6+1,3,9,-4,3,Blast,Hazardous,
+Redemptor Dreadnought,Onslaught gatling cannon,28,8,3,5,0,1,Devastating Wounds,,
+Redemptor Dreadnought,Twin fragstorm grenade launcher,18,D6+1,3,4,0,1,Blast,Twin-Linked,
+Redemptor Dreadnought,Redemptor fist,0,5,3,12,-2,3,,,

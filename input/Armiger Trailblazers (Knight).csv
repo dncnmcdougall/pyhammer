@@ -1,0 +1,13 @@
+Unit,Weapon,Range,Attacks,Skill,Strength,AP,Damage,Modifier 1,Modifier 2,Modifier 3
+Dantos and Thauvir,Armiger autocannon,48,4,3,9,-1,3,,,
+Dantos and Thauvir,Questoris heavy stubber,36,3,3,4,-1,1,Rapid Fire 3,,
+Dantos and Thauvir,Armoured feet,0,4,3,6,0,1,,,
+Dantos and Thauvir (Damaged),Armiger autocannon,48,4,4,9,-1,3,Pistol,,
+Dantos and Thauvir (Damaged),Questoris heavy stubber,36,3,4,4,-1,1,Rapid Fire 3,,
+Dantos and Thauvir (Damaged),Armoured feet,0,4,4,6,0,1,,,
+Morrigan and Viridor,Questoris heavy stubber,36,3,3,4,-1,1,Rapid Fire 3,,
+Morrigan and Viridor,Thermal spear,24,2,3,12,-4,D6,Melta 4,,
+Morrigan and Viridor,Reaper chain-cleaver,0,8,3,8,-2,1,,,
+Morrigan and Viridor (Damaged),Questoris heavy stubber,36,3,4,4,-1,1,Rapid Fire 3,,
+Morrigan and Viridor (Damaged),Thermal spear,24,2,4,12,-4,D6,Melta 4,,
+Morrigan and Viridor (Damaged),Reaper chain-cleaver,0,8,4,8,-2,1,,,

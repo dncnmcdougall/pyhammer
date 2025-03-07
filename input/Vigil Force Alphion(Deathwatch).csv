@@ -1,0 +1,14 @@
+Unit,Weapon,Range,Attacks,Skill,Strength,AP,Damage,Modifier 1,Modifier 2,Modifier 3
+Lieutenant ,Bolt pistol ,12,1,2,4,0,1,Pistol,,
+Lieutenant ,Master-crafted power weapon,0,5,2,5,-2,2,,,
+Apothecary,Absolver bolt pistol,18,1,3,5,-1,2,Pistol,,
+Apothecary,Reductor pistol,3,1,3,4,-4,2,Pistol,,
+Apothecary,Close Combat,0,4,3,4,0,1,,,
+Intercessor,Astates grenade launcher - frag,24,D3,3,4,0,1,Blast,,
+Intercessor,Astates grenade launcher - krak,24,1,3,9,-2,D3,,,
+Intercessor,Bolt pistol ,12,1,3,4,0,1,Pistol,,
+Intercessor,Bolt rifle,24,2,2,4,-1,1,,,
+Intercessor,Bolt rifle (Moved),24,2,3,4,-1,1,,,
+Intercessor,Close Combat,0,3,3,4,0,1,,,
+Aggressor,Flamestorm gauntlets,12,D6+1,0,4,0,1,Ignores cover,Torrent,Twin-Linked
+Aggressor,Twin power fists,0,3,4,8,-2,2,Twin-Linked,,
