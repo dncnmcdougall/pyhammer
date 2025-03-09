@@ -49,7 +49,7 @@ class SimpleWeapon:
         return f'R:{self.R}" A:{self.A} WS:{self.WS} S:{self.S} AP:{self.AP} D:{self.D}'
 
     def keywords(self) -> str:
-        return ",".join([mod.__name__ for mod in self.modifiers])
+        return ", ".join([mod.__name__ for mod in self.modifiers])
 
     @modify("attack")
     def attack(self, options: AttackOptions) -> list[Outcome]:
@@ -112,9 +112,11 @@ def modifier(roll: str) -> Callable[[Modifier], Modifier]:
 
     return modify
 
+
 @modifier("null")
 def indirect_fire(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
     return outcomes
+
 
 @modifier("null")
 def ignores_cover(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:

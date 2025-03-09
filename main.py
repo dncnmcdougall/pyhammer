@@ -1,6 +1,7 @@
 import os
 from dataclasses import dataclass, field
 from icecream import ic
+import string
 
 
 from weapon import SimpleWeapon, AttackOptions, RollFunc
@@ -25,8 +26,15 @@ class DataLine:
 
     @staticmethod
     def parse_line(line: str) -> "DataLine":
-        parts = [p.strip().lower() for p in line.split(",")]
-        parts = [p for p in parts if len(p) > 0]
+        parts = []
+        for ii, p in enumerate(line.split(",")):
+            if ii < 2:
+                parts.append(string.capwords(p))
+            else:
+                strip_p = p.strip().lower()
+                if ii < 8 or len(p) > 0:
+                    parts.append(strip_p.lower())
+
         assert len(parts) >= 8
 
         if "d" in parts[3]:

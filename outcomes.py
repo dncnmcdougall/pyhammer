@@ -89,7 +89,7 @@ class Dice:
         return [Outcome(1, ii + self.addition, success(), False, False) for ii in range(1, self.sides + 1)]
 
     def __str__(self):
-        results = f"d{self.sides}"
+        results = f"D{self.sides}"
         if self.addition > 0:
             return f"{results}+{self.addition}"
         else:
