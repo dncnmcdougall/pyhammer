@@ -112,6 +112,9 @@ def modifier(roll: str) -> Callable[[Modifier], Modifier]:
 
     return modify
 
+@modifier("null")
+def indirect_fire(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:
+    return outcomes
 
 @modifier("null")
 def ignores_cover(weapon: SimpleWeapon, options: AttackOptions, outcomes: list[Outcome]) -> list[Outcome]:

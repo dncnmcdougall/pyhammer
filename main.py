@@ -116,7 +116,10 @@ class DataFile:
             for ii, line in enumerate(fle):
                 if ii == 0:
                     continue
-                self.lines.append(DataLine.parse_line(line))
+                stripped_line = line.strip()
+                if len(stripped_line) == 0:
+                    continue
+                self.lines.append(DataLine.parse_line(stripped_line))
 
 
 if __name__ == "__main__":
@@ -132,12 +135,13 @@ if __name__ == "__main__":
         wp.twin_linked,
         wp.critical_hits(4),
         wp.critical_hits(5),
+        wp.melta(4),
         wp.precision,
         wp.blast,
         wp.pistol,
         wp.hazardous,
         wp.ignores_cover,
-        wp.melta(4),
+        wp.indirect_fire,
     ]
     modifier_map = {func.__name__.lower().replace("_", " "): func for func in modifier_funcs}
 
