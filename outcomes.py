@@ -81,15 +81,27 @@ class Outcome:
 
 
 class Dice:
-    def __init__(self, sides: int, addition: int = 0):
+    def __init__(self, number: int, sides: int, addition: int = 0):
+        self.number = number
         self.sides = sides
         self.addition = addition
 
     def __call__(self) -> list[Outcome]:
-        return [Outcome(1, ii + self.addition, success(), False, False) for ii in range(1, self.sides + 1)]
+        rolls = [ii for ii in range(1, self.sides + 1)]
+        for _ in range(1, self.number):
+            new_rolls = []
+            for r in rolls:
+                new_rolls.extend([r + jj for jj in range(1, self.sides + 1)])
+            rolls = new_rolls
+
+        return [Outcome(1, ii + self.addition, success(), False, False) for ii in rolls]
 
     def __str__(self):
-        results = f"D{self.sides}"
+        if self.number > 1:
+            prefix = str(self.number)
+        else:
+            prefix = ""
+        results = f"{prefix}d{self.sides}"
         if self.addition > 0:
             return f"{results}+{self.addition}"
         else:
@@ -99,10 +111,17 @@ class Dice:
     def from_str(s: str) -> "Dice":
         parts = [p.strip() for p in s.split("+")]
         assert (len(parts) >= 1) and (len(parts) <= 2)
-        assert parts[0][0].lower() == "d"
-        sides = int(parts[0][1:])
         if len(parts) > 1:
             addition = int(parts[1])
         else:
             addition = 0
-        return Dice(sides, addition)
+
+        parts = [p.strip() for p in parts[0].split("d")]
+        assert (len(parts) >= 1) and (len(parts) <= 2)
+        if len(parts[0]) > 0:
+            number = int(parts[0])
+            sides = int(parts[1])
+        else:
+            number = 1
+            sides = int(parts[1])
+        return Dice(number, sides, addition)

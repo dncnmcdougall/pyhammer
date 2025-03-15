@@ -1,15 +1,18 @@
 import os
 from dataclasses import dataclass, field
-from icecream import ic
+import icecream
 import string
 
 
-from weapon import SimpleWeapon, AttackOptions, RollFunc
-import weapon as wp
+from weapon import SimpleWeapon, RollFunc
 from outcomes import Dice
 from model import SimpleModel
 from table import Table, Heading, Cell, CellValue, Index
 import roll as rl
+from actions import AttackOptions
+import actions
+
+icecream.install()
 
 
 @dataclass
@@ -132,28 +135,45 @@ class DataFile:
 
 if __name__ == "__main__":
     modifier_funcs = [
-        wp.torrent,
-        wp.sustained_hits(1),
-        wp.sustained_hits(2),
-        wp.rapid_fire(1),
-        wp.rapid_fire(2),
-        wp.rapid_fire(3),
-        wp.lethal_hits,
-        wp.devastating_wounds,
-        wp.twin_linked,
-        wp.critical_hits(4),
-        wp.critical_hits(5),
-        wp.melta(4),
-        wp.precision,
-        wp.blast,
-        wp.pistol,
-        wp.hazardous,
-        wp.ignores_cover,
-        wp.indirect_fire,
+        actions.torrent,
+        actions.sustained_hits(1),
+        actions.sustained_hits(2),
+        actions.sustained_hits(Dice(1, 3, 0)),
+        actions.rapid_fire(1),
+        actions.rapid_fire(2),
+        actions.rapid_fire(3),
+        actions.rapid_fire(5),
+        actions.rapid_fire(6),
+        actions.lethal_hits,
+        actions.devastating_wounds,
+        actions.twin_linked,
+        actions.critical_hits(4),
+        actions.critical_hits(5),
+        actions.melta(4),
+        actions.precision,
+        actions.blast,
+        actions.pistol,
+        actions.hazardous,
+        actions.ignores_cover,
+        actions.indirect_fire,
+        actions.anti("character", 4),
+        actions.anti("fly", 4),
+        actions.anti("vehicle", 2),
+        actions.bypass_wound,
+        actions.bypass_save,
+        actions.mortal_wounds,
+        actions.reroll_hit_1,
+        actions.all_hits_critical,
+        actions.all_wounds_critical,
+        actions.one_shot,
+        actions.assult,
+        actions.heavy,
     ]
-    modifier_map = {func.__name__.lower().replace("_", " "): func for func in modifier_funcs}
+    modifier_map = {func.name.lower().replace("_", " "): func for func in modifier_funcs}
 
-    options = AttackOptions(12, False)
+    key_errors = []
+
+    options = AttackOptions(False, False, False)
     input = "input"
     output = "docs"
     index = Index()
@@ -164,7 +184,11 @@ if __name__ == "__main__":
             datafile.read()
             for line in datafile.lines:
                 print(f"Process {group_name} {line.unit} {line.weapon_name}")
-                weapon, table = line.create_weapon_and_table(options, modifier_map)
+                try:
+                    weapon, table = line.create_weapon_and_table(options, modifier_map)
+                except KeyError as e:
+                    key_errors.append(e)
+                    continue
                 output_folder = os.path.join(group_name, line.unit)
                 if not os.path.exists(os.path.join(output, output_folder)):
                     os.makedirs(os.path.join(output, output_folder))
@@ -177,3 +201,6 @@ if __name__ == "__main__":
                 )
                 index.add_file(group_name, line.unit, weapon.name, filename=output_filename)
     index.write(os.path.join(output, "index.html"))
+
+    for e in key_errors:
+        print(e)
