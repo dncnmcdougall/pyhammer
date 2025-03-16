@@ -8,12 +8,16 @@ dependencies = [
     "icecream>=2.1.4",
     "mypy>=1.15.0",
     "polars>=1.25.2",
+    "pre-commit>=4.1.0",
+    "pyinstrument>=5.0.1",
     "ruff>=0.9.7",
 ]
 
 [tool.ruff]
 indent-width=4
 line-length=120
+builtins = ['ic']
 
 [tool.ruff.lint]
 select=["E","F","N", "B"]
+ignore = ["F401"]
