@@ -1,5 +1,5 @@
 from typing import Any
-from events import EventSet
+from events import EventSet, collapse_tree
 from functools import cache
 
 import events as ev
@@ -11,17 +11,22 @@ from model import SimpleModel
 from weapon import SimpleWeapon
 
 
+def return_res(results, name):
+    # print(f'{name}{len(results)},', end='', flush=True)
+    return ev.collapse_tree(results, name=name)
+
+
 @cache
 def feel_no_pain_roll(fnp_char: int, options: AttackOptions, reroll: bool) -> ev.Together:
     # Like the save throw, a successful FNP means a failure to damage. i.e. negation
     results: list[EventSet] = [
         ev.Leaf("dmg", suc)
         for suc in [
-            ev.failure() if fnp.success else ev.success()
+            ev.failure() if fnp.success else ev.success(1)
             for fnp in actions.feel_no_pain(options.modifiers, fnp_char, options)
         ]
     ]
-    return ev.Together(results, name="fnp")
+    return return_res(results, "F")
 
 
 @cache
@@ -42,14 +47,14 @@ def damage_roll(
 
         res = []
         for key, prob in all.outcomes().items():
-            assert len(key.results) <= 1
-            if len(key.results) > 0:
+            assert key.count <= 1
+            if key.count > 0:
                 res.append(ev.Leaf("a", ev.success(key.results[0]), probability=prob))
             else:
                 res.append(ev.Leaf("a", ev.failure(), probability=prob))
         results.append(ev.Together(res))
 
-    return ev.collapse_tree(results, name="dr")
+    return return_res(results, "D")
 
 
 @cache
@@ -69,7 +74,7 @@ def save_roll(
             results.append(save_roll(save_char, armour_penetration, damage_char, fnp_char, options, False))
         else:
             results.append(damage_roll(damage_char, False, fnp_char, options, True))
-    return ev.collapse_tree(results, name="sr")
+    return return_res(results, "S")
 
 
 @cache
@@ -104,7 +109,7 @@ def wound_roll(
             )
         else:
             results.append(ev.Leaf("w-f", ev.failure()))
-    return ev.collapse_tree(results, name="wr")
+    return return_res(results, "W")
 
 
 @cache
@@ -151,7 +156,7 @@ def hit_roll(
             )
         else:
             results.append(ev.Leaf("h-f", ev.failure()))
-    return ev.collapse_tree(results, name="hr")
+    return return_res(results, "H")
 
 
 @cache
@@ -190,6 +195,7 @@ def attack_roll(
                 options,
                 True,
             )
+
             for _ in range(attack.value):
                 possible_attacks.append(hit_results)
             results.append(ev.All(possible_attacks, name="suc"))
@@ -210,4 +216,4 @@ def attack_roll(
             )
         else:
             results.append(ev.Leaf("attack", ev.failure()))
-    return ev.Together(results, name="ar")
+    return return_res(results, "A")

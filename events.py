@@ -4,6 +4,8 @@ from abc import ABC, abstractmethod
 
 Probability = float
 
+max_damage = 30
+
 
 @dataclass(frozen=True)
 class EventResult:
@@ -13,45 +15,25 @@ class EventResult:
     The position
     """
 
-    results: tuple[int, ...]
+    results: tuple[int, ...] = (0,) * max_damage
+    count: int = 0
 
     @staticmethod
     def join(first, second) -> "EventResult":
-        first_len = len(second.resutls)
-        second_len = len(second.resutls)
-        max_len = max(first_len, second_len)
-        values = []
-        for ii in range(max_len):
-            if ii < first_len and ii < second_len:
-                values.append(first.results[ii] + second.results[ii])
-            elif ii < first_len:
-                values.append(first.results[ii])
-            else:
-                values.append(second.results[ii])
-        return EventResult(tuple(values))
-
-    @staticmethod
-    def join_many(*items: "EventResult") -> "EventResult":
-        values: list[int] = []
-        for item in items:
-            len_values = len(values)
-            for ii, v in enumerate(item.results):
-                if ii < len_values:
-                    values[ii] += v
-                else:
-                    values.append(v)
-        return EventResult(tuple(values))
+        values = [first.results[ii] + second.results[ii] for ii in range(max_damage)]
+        count = max([ii + 1 if v else 0 for ii, v in enumerate(values)])
+        return EventResult(tuple(values), count)
 
     def total(self) -> int:
         return sum([(ii + 1) * v for ii, v in enumerate(self.results)])
 
 
 def success(amount: int = 1) -> EventResult:
-    return EventResult(tuple([0 if ii + 1 < amount else 1 for ii in range(amount)]))
+    return EventResult(tuple([1 if ii + 1 == amount else 0 for ii in range(max_damage)]), count=amount)
 
 
 def failure() -> EventResult:
-    return EventResult(tuple())
+    return EventResult(tuple([0 for _ in range(max_damage)]), count=0)
 
 
 class EventSet(ABC):
@@ -104,7 +86,7 @@ class All(EventSet):
                 new_outcome_map = defaultdict(float)
                 for key, prob in outcome_map.items():
                     for this_key, this_prob in set_outcomes.items():
-                        new_key = EventResult.join_many(key, this_key)
+                        new_key = EventResult.join(key, this_key)
                         new_outcome_map[new_key] += prob * this_prob
                 outcome_map = new_outcome_map
         return outcome_map
@@ -142,17 +124,3 @@ def collapse_tree(tree: dict[EventResult, Probability] | EventSet | list[EventSe
     for key, prob in map.items():
         res.append(Leaf("a", key, probability=prob))
     return Together(res, name=name)
-
-
-if __name__ == "__main__":
-    from icecream import ic
-
-    ic(failure())
-    ic(success(0))
-    ic(success(1))
-    ic(success(2))
-    ic(success(3))
-    ic(EventResult.join_many(success(1), success(0), success(1)))
-    ic(EventResult.join_many(success(2), success(0)))
-    ic(EventResult.join_many(success(2), success(1)))
-    ic(EventResult.join_many(success(2), success(2)))

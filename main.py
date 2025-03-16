@@ -2,6 +2,7 @@ import os
 from dataclasses import dataclass, field
 import icecream
 import string
+import datetime as dt
 
 
 from weapon import SimpleWeapon
@@ -83,19 +84,21 @@ class DataLine:
             tuple(modifiers),
         )
 
-    def create_weapon_and_table(
-        self, options: AttackOptions, modifier_map: dict[str, actions.Modifier]
-    ) -> tuple[SimpleWeapon, Table]:
+    def create_table(self, options: AttackOptions, weapon: SimpleWeapon) -> tuple[SimpleWeapon, Table]:
         table = Table()
 
         table.set_rows([Heading(f"T {ii}", ii) for ii in range(2, 15)])
         table.set_columns([Heading(f"Sv{ii}+", ii) for ii in range(7, 1, -1)])
 
-        weapon = self.create_weapon(modifier_map)
-
         these_options = AttackOptions(options.half_range, options.cover, options.anti_active, weapon.modifiers)
 
-        for cell in table.get_full_cell_list():
+        full_cell_list = table.get_full_cell_list()
+
+        print("[", end="", flush=True)
+        next = 5
+        total = len(full_cell_list)
+
+        for jj, cell in enumerate(full_cell_list):
             target = SimpleModel(
                 f"{cell.row.name}, {cell.column.name}",
                 cell.row.value,
@@ -118,7 +121,12 @@ class DataLine:
 
             table.set_cells([new_cell])
 
-        return weapon, table
+            if (100 * jj) / total > next:
+                print("=", end="", flush=True)
+                next += 5
+        print("]")
+
+        return table
 
 
 @dataclass
@@ -178,7 +186,7 @@ if __name__ == "__main__":
     key_errors = []
 
     options = AttackOptions(False, False, False, tuple())
-    input = "test"
+    input = "input"
     output = "docs"
     index = Index()
     for fle in os.listdir(input):
@@ -187,12 +195,19 @@ if __name__ == "__main__":
             datafile = DataFile(os.path.join(input, fle))
             datafile.read()
             for line in datafile.lines:
+                start = dt.datetime.now()
+                weapon = line.create_weapon(modifier_map)
                 print(f"Process {group_name} {line.unit} {line.weapon_name}")
+                print(weapon.stat_line())
+                print(weapon.keywords())
                 try:
-                    weapon, table = line.create_weapon_and_table(options, modifier_map)
+                    table = line.create_table(options, weapon)
                 except KeyError as e:
                     key_errors.append(e)
                     continue
+                finally:
+                    end = dt.datetime.now()
+                    print(f" {end - start}")
                 output_folder = os.path.join(group_name, line.unit)
                 if not os.path.exists(os.path.join(output, output_folder)):
                     os.makedirs(os.path.join(output, output_folder))
