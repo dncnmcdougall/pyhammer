@@ -4,7 +4,7 @@ import icecream
 import string
 
 
-from weapon import SimpleWeapon, RollFunc
+from weapon import SimpleWeapon
 from outcomes import Dice
 from model import SimpleModel
 from table import Table, Heading, Cell, CellValue, Index
@@ -67,7 +67,7 @@ class DataLine:
             ic(parts)
             raise
 
-    def create_weapon(self, modifier_map: dict[str, RollFunc]) -> SimpleWeapon:
+    def create_weapon(self, modifier_map: dict[str, actions.Modifier]) -> SimpleWeapon:
         modifiers = []
         for modifier_name in self.modifiers:
             modifiers.append(modifier_map[modifier_name])
@@ -84,7 +84,7 @@ class DataLine:
         )
 
     def create_weapon_and_table(
-        self, options: AttackOptions, modifier_map: dict[str, RollFunc]
+        self, options: AttackOptions, modifier_map: dict[str, actions.Modifier]
     ) -> tuple[SimpleWeapon, Table]:
         table = Table()
 
@@ -93,15 +93,19 @@ class DataLine:
 
         weapon = self.create_weapon(modifier_map)
 
+        these_options = AttackOptions(options.half_range, options.cover, options.anti_active, weapon.modifiers)
+
         for cell in table.get_full_cell_list():
-            model = SimpleModel(
+            target = SimpleModel(
                 f"{cell.row.name}, {cell.column.name}",
                 cell.row.value,
                 cell.column.value,
                 1,
                 0,
             )
-            damage = rl.attackRoll(weapon, model, options, True)
+            damage = rl.attack_roll(
+                weapon.A, weapon.WS, weapon.S, target.T, target.S, weapon.AP, weapon.D, target.FNP, these_options, True
+            )
 
             results = damage.outcomes().items()
             values = [0.0 for _ in range(table.damage_n)]
@@ -173,7 +177,7 @@ if __name__ == "__main__":
 
     key_errors = []
 
-    options = AttackOptions(False, False, False)
+    options = AttackOptions(False, False, False, tuple())
     input = "input"
     output = "docs"
     index = Index()

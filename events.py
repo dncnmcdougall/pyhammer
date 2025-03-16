@@ -84,8 +84,8 @@ class EventsKey:
 
 
 class EventSet(ABC):
-    def __init__(self, events: tuple["EventSet", ...], name="", probability: Probability = 1.0):
-        self.events = events
+    def __init__(self, events: tuple["EventSet", ...] | list["EventSet"], name="", probability: Probability = 1.0):
+        self.events = events if isinstance(events, tuple) else tuple(events)
         self.name = name
         self.probability = probability
 

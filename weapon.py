@@ -4,12 +4,7 @@ from dataclasses import dataclass, field
 
 from outcomes import Outcome, Dice
 import outcomes as oc
-
-
-P = ParamSpec("P")
-R = TypeVar("R")
-
-RollFunc = Callable[P, list[Outcome]]
+from actions import Modifier
 
 
 @dataclass(frozen=True)
@@ -22,7 +17,7 @@ class SimpleWeapon:
     AP: int
     D: int | Dice
 
-    modifiers: tuple[RollFunc]
+    modifiers: tuple[Modifier]
 
     def stat_line(self) -> str:
         return f'R:{self.R}" A:{self.A} WS:{self.WS} S:{self.S} AP:{self.AP} D:{self.D}'
