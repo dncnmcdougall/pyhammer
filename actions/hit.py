@@ -20,7 +20,7 @@ def hit(WS: int, options: AttackOptions) -> list[Outcome]:
 def sustained_hits(count: int | Dice) -> Modifier:
     if isinstance(count, int):
 
-        @modifier("hit", f"sustained_hits_{str(count)}")
+        @modifier(hit, f"sustained_hits_{str(count)}")
         def update(outcomes: list[Outcome], WS: int, options: AttackOptions) -> list[Outcome]:
             return [
                 Outcome(
@@ -34,7 +34,7 @@ def sustained_hits(count: int | Dice) -> Modifier:
             ]
     else:
 
-        @modifier("hit", f"sustained_hits_{count}")
+        @modifier(hit, f"sustained_hits_{count}")
         def update(outcomes: list[Outcome], WS: int, options: AttackOptions) -> list[Outcome]:
             output = []
 
@@ -52,7 +52,7 @@ def sustained_hits(count: int | Dice) -> Modifier:
 
 
 def critical_hits(count: int) -> Modifier:
-    @modifier("hit", f"critical_hits_{count}")
+    @modifier(hit, f"critical_hits_{count}")
     def update(outcomes: list[Outcome], WS: int, options: AttackOptions) -> list[Outcome]:
         return [
             Outcome(
@@ -68,7 +68,7 @@ def critical_hits(count: int) -> Modifier:
     return update
 
 
-@modifier("hit")
+@modifier(hit)
 def all_hits_critical(outcomes: list[Outcome], WS: int, options: AttackOptions) -> list[Outcome]:
     return [
         Outcome(
@@ -82,7 +82,7 @@ def all_hits_critical(outcomes: list[Outcome], WS: int, options: AttackOptions) 
     ]
 
 
-@modifier("hit", "re-roll hit 1")
+@modifier(hit, "re-roll hit 1")
 def reroll_hit_1(outcomes: list[Outcome], WS: int, options: AttackOptions) -> list[Outcome]:
     return [
         Outcome(
@@ -96,7 +96,7 @@ def reroll_hit_1(outcomes: list[Outcome], WS: int, options: AttackOptions) -> li
     ]
 
 
-@modifier("hit")
+@modifier(hit)
 def lethal_hits(outcomes: list[Outcome], WS: int, options: AttackOptions) -> list[Outcome]:
     return [
         Outcome(
@@ -110,7 +110,7 @@ def lethal_hits(outcomes: list[Outcome], WS: int, options: AttackOptions) -> lis
     ]
 
 
-@modifier("hit")
+@modifier(hit)
 def bypass_wound(outcomes: list[Outcome], WS: int, options: AttackOptions) -> list[Outcome]:
     return [
         Outcome(

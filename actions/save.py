@@ -1,4 +1,5 @@
-from .base import action, modifier, Modifier
+from typing import reveal_type
+from .base import action, modifier, Modifier, Action
 from .options import AttackOptions
 
 from outcomes import Outcome, Dice
@@ -13,6 +14,6 @@ def save(SV: int, armour_piercing: int, options: AttackOptions) -> list[Outcome]
     ]
 
 
-@modifier("save")
-def bypass_save(outcomes: list[Outcome], SV: int, armour_piercing: int, options: AttackOptions) -> list[Outcome]:
+@modifier(save)
+def bypass_save(outcomes: list[Outcome], SV:int, armour_piercing: int, options: AttackOptions) -> list[Outcome]:
     return [Outcome(1, 0, oc.failure(), False, False)]

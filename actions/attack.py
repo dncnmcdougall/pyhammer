@@ -13,13 +13,13 @@ def attack(A: int, options: AttackOptions) -> list[Outcome]:
         return [Outcome(A, -1, oc.success(), False, False)]
 
 
-@modifier("attack")
+@modifier(attack)
 def torrent(outcomes: list[Outcome], A: int, options: AttackOptions) -> list[Outcome]:
     return [Outcome(o.value, o.roll_value, o.success, bool(o.success), o.reroll) for o in outcomes]
 
 
 def rapid_fire(amount: int) -> Modifier:
-    @modifier("attack", f"rapid_fire_{amount}")
+    @modifier(attack, f"rapid_fire_{amount}")
     def update(outcomes: list[Outcome], A: int, options: AttackOptions) -> list[Outcome]:
         if options.half_range:
             return [Outcome(o.value + amount, o.roll_value, o.success, o.bypass_next, o.reroll) for o in outcomes]

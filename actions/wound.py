@@ -17,7 +17,7 @@ def wound(S: int, target_toughness: int, options: AttackOptions) -> list[Outcome
     ]
 
 
-@modifier("wound")
+@modifier(wound)
 def devastating_wounds(
     outcomes: list[Outcome],
     S: int,
@@ -36,7 +36,7 @@ def devastating_wounds(
     ]
 
 
-@modifier("wound", "twin-linked")
+@modifier(wound, "twin-linked")
 def twin_linked(
     outcomes: list[Outcome],
     S: int,
@@ -56,12 +56,12 @@ def twin_linked(
 
 
 def anti(keyword: str, amount: int) -> Modifier:
-    @modifier("wound", f"anti_{keyword}_{amount}")
+    @modifier(wound, f"anti_{keyword}_{amount}")
     def update(
         outcomes: list[Outcome],
         S: int,
-        target_toughtness: int,
-        options: AttackOptions,
+        target_toughness: int,
+        options: AttackOptions
     ) -> list[Outcome]:
         if options.anti_active:
             return [
@@ -79,20 +79,8 @@ def anti(keyword: str, amount: int) -> Modifier:
 
     return update
 
-
-def melta(count: int) -> Modifier:
-    @modifier("damage", f"melta_{count}")
-    def update(outcomes: list[Outcome], S: int, target_toughness: int, options: AttackOptions) -> list[Outcome]:
-        if options.half_range:
-            return [Outcome(o.value + count, o.roll_value, o.success, o.bypass_next, o.reroll) for o in outcomes]
-        else:
-            return outcomes
-
-    return update
-
-
 def critical_wounds(count: int) -> Modifier:
-    @modifier("wound", f"critical_wounds_{count}")
+    @modifier(wound, f"critical_wounds_{count}")
     def update(outcomes: list[Outcome], S: int, target_toughness: int, options: AttackOptions) -> list[Outcome]:
         return [
             Outcome(
@@ -108,7 +96,7 @@ def critical_wounds(count: int) -> Modifier:
     return update
 
 
-@modifier("wound")
+@modifier(wound)
 def all_wounds_critical(
     outcomes: list[Outcome], S: int, target_toughness: int, options: AttackOptions
 ) -> list[Outcome]:
