@@ -110,7 +110,7 @@ class DataLine:
             results = damage.outcomes().items()
             values = [0.0 for _ in range(table.damage_n)]
             for key, prob in results:
-                damage = sum(k.value for k in key.outcomes)
+                damage = key.total()
                 for ii in range(table.damage_n):
                     if damage >= (ii + 1):
                         values[ii] += prob
@@ -178,7 +178,7 @@ if __name__ == "__main__":
     key_errors = []
 
     options = AttackOptions(False, False, False, tuple())
-    input = "input"
+    input = "test"
     output = "docs"
     index = Index()
     for fle in os.listdir(input):

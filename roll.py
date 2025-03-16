@@ -1,5 +1,5 @@
 from typing import Any
-from events import EventSet, EventSuccess
+from events import EventSet
 from functools import cache
 
 import events as ev
@@ -42,13 +42,14 @@ def damage_roll(
 
         res = []
         for key, prob in all.outcomes().items():
-            success = EventSuccess(sum(k.value for k in key.outcomes), spill=spill)
-            res.append(ev.Leaf("a", success, probability=prob))
-        results.append(ev.Together(tuple(res)))
+            assert len(key.results) <= 1
+            if len(key.results) > 0:
+                res.append(ev.Leaf("a", ev.success(key.results[0]), probability=prob))
+            else:
+                res.append(ev.Leaf("a", ev.failure(), probability=prob))
+        results.append(ev.Together(res))
 
-        # results.append(ev.All(possible_damage, name="d"))
-
-    return ev.Together(results, name="dr")
+    return ev.collapse_tree(results, name="dr")
 
 
 @cache
@@ -68,7 +69,7 @@ def save_roll(
             results.append(save_roll(save_char, armour_penetration, damage_char, fnp_char, options, False))
         else:
             results.append(damage_roll(damage_char, False, fnp_char, options, True))
-    return ev.Together(results, name="sr")
+    return ev.collapse_tree(results, name="sr")
 
 
 @cache
@@ -103,7 +104,7 @@ def wound_roll(
             )
         else:
             results.append(ev.Leaf("w-f", ev.failure()))
-    return ev.Together(results, name="wr")
+    return ev.collapse_tree(results, name="wr")
 
 
 @cache
@@ -150,7 +151,7 @@ def hit_roll(
             )
         else:
             results.append(ev.Leaf("h-f", ev.failure()))
-    return ev.Together(results, name="hr")
+    return ev.collapse_tree(results, name="hr")
 
 
 @cache
