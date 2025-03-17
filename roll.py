@@ -1,6 +1,6 @@
 from typing import Any
-from events import EventSet, collapse_tree
-from functools import cache
+from events import EventSet, Probability, collapse_tree
+from functools import lru_cache
 
 import events as ev
 import actions
@@ -10,13 +10,19 @@ from outcomes import Dice
 from model import SimpleModel
 from weapon import SimpleWeapon
 
+LRU_CACHEMAX_MAX = 1_000
+
+
+class ProbabilityTreeTooLargeError(Exception):
+    pass
+
 
 def return_res(results, name):
     # print(f'{name}{len(results)},', end='', flush=True)
     return ev.collapse_tree(results, name=name)
 
 
-@cache
+@lru_cache(maxsize=LRU_CACHEMAX_MAX)
 def feel_no_pain_roll(fnp_char: int, options: AttackOptions, reroll: bool) -> ev.Together:
     # Like the save throw, a successful FNP means a failure to damage. i.e. negation
     results: list[EventSet] = [
@@ -29,7 +35,7 @@ def feel_no_pain_roll(fnp_char: int, options: AttackOptions, reroll: bool) -> ev
     return return_res(results, "F")
 
 
-@cache
+@lru_cache(maxsize=LRU_CACHEMAX_MAX)
 def damage_roll(
     damage_char: int,
     spill: bool,
@@ -57,7 +63,7 @@ def damage_roll(
     return return_res(results, "D")
 
 
-@cache
+@lru_cache(maxsize=LRU_CACHEMAX_MAX)
 def save_roll(
     save_char: int,
     armour_penetration: int,
@@ -77,7 +83,7 @@ def save_roll(
     return return_res(results, "S")
 
 
-@cache
+@lru_cache(maxsize=LRU_CACHEMAX_MAX)
 def wound_roll(
     strength_char: int,
     target_toughness: int,
@@ -112,7 +118,7 @@ def wound_roll(
     return return_res(results, "W")
 
 
-@cache
+@lru_cache(maxsize=LRU_CACHEMAX_MAX)
 def hit_roll(
     weapon_skill: int,
     strength_char: int,
@@ -159,7 +165,7 @@ def hit_roll(
     return return_res(results, "H")
 
 
-@cache
+@lru_cache(maxsize=LRU_CACHEMAX_MAX)
 def attack_roll(
     attack_char: int | Dice,
     weapon_skill: int,
@@ -171,8 +177,9 @@ def attack_roll(
     fnp_char: int,
     options: AttackOptions,
     reroll: bool,
-) -> ev.Together:
+) -> tuple[ev.Together, tuple[int, int]]:
     results: list[EventSet] = []
+    all_possibilities = tuple()
     for attack in actions.attack(options.modifiers, attack_char, options):
         if attack.bypass_next:
             possible_attacks: list[EventSet] = []
@@ -181,6 +188,7 @@ def attack_roll(
             )
             for _ in range(attack.value):
                 possible_attacks.append(wound_results)
+            all_possibilities = (attack.value, len(wound_results.events))
             results.append(ev.All(possible_attacks, name="byp"))
         elif attack.success:
             possible_attacks: list[EventSet] = []
@@ -198,22 +206,23 @@ def attack_roll(
 
             for _ in range(attack.value):
                 possible_attacks.append(hit_results)
+            all_possibilities = (attack.value, len(hit_results.events))
             results.append(ev.All(possible_attacks, name="suc"))
         elif attack.reroll and reroll:
-            results.append(
-                attack_roll(
-                    attack_char,
-                    weapon_skill,
-                    strength_char,
-                    target_toughness,
-                    save_char,
-                    armour_penetration,
-                    damage_char,
-                    fnp_char,
-                    options,
-                    False,
-                )
+            attack_result, all_possibilities = attack_roll(
+                attack_char,
+                weapon_skill,
+                strength_char,
+                target_toughness,
+                save_char,
+                armour_penetration,
+                damage_char,
+                fnp_char,
+                options,
+                False,
             )
+            results.append(attack_result)
         else:
             results.append(ev.Leaf("attack", ev.failure()))
-    return return_res(results, "A")
+            all_possibilities = (1, 1)
+    return return_res(results, "A"), all_possibilities

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 Probability = float
 
-max_damage = 30
+max_damage = 20
 
 
 @dataclass(frozen=True)
@@ -29,6 +29,7 @@ class EventResult:
 
 
 def success(amount: int = 1) -> EventResult:
+    assert amount <= max_damage
     return EventResult(tuple([1 if ii + 1 == amount else 0 for ii in range(max_damage)]), count=amount)
 
 

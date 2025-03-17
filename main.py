@@ -1,3 +1,4 @@
+from enum import unique
 import os
 from dataclasses import dataclass, field
 import icecream
@@ -84,7 +85,7 @@ class DataLine:
             tuple(modifiers),
         )
 
-    def create_table(self, options: AttackOptions, weapon: SimpleWeapon) -> tuple[SimpleWeapon, Table]:
+    def create_table(self, options: AttackOptions, weapon: SimpleWeapon) -> Table:
         table = Table()
 
         table.set_rows([Heading(f"T {ii}", ii) for ii in range(2, 15)])
@@ -94,9 +95,11 @@ class DataLine:
 
         full_cell_list = table.get_full_cell_list()
 
-        print("[", end="", flush=True)
         next = 5
         total = len(full_cell_list)
+        unique_possibilities = 0
+        all_possibilities = 0
+        first = True
 
         for jj, cell in enumerate(full_cell_list):
             target = SimpleModel(
@@ -106,11 +109,24 @@ class DataLine:
                 1,
                 0,
             )
-            damage = rl.attack_roll(
+            start = dt.datetime.now()
+            damage, all_possibilities = rl.attack_roll(
                 weapon.A, weapon.WS, weapon.S, target.T, target.S, weapon.AP, weapon.D, target.FNP, these_options, True
             )
 
             results = damage.outcomes().items()
+            unique_possibilities = len(results)
+            end = dt.datetime.now()
+
+            if first:
+                diff = end - start
+                total_outcomes = all_possibilities[1] ** all_possibilities[0]
+                print(
+                    f"unique outcomes: {unique_possibilities:,}, all outcomes {all_possibilities}: {total_outcomes:,}"
+                )
+                print(f"time per {diff} each of {total}, extimated {diff * total}")
+                print("[", end="", flush=True)
+                first = False
             values = [0.0 for _ in range(table.damage_n)]
             for key, prob in results:
                 damage = key.total()
@@ -148,19 +164,20 @@ class DataFile:
 if __name__ == "__main__":
     modifier_funcs = [
         actions.torrent,
-        actions.sustained_hits(1),
-        actions.sustained_hits(2),
-        actions.sustained_hits(Dice(1, 3, 0)),
+        actions.reroll_hit_1,
+        actions.all_hits_critical,
         actions.rapid_fire(1),
         actions.rapid_fire(2),
         actions.rapid_fire(3),
         actions.rapid_fire(5),
         actions.rapid_fire(6),
-        actions.lethal_hits,
-        actions.devastating_wounds,
-        actions.twin_linked,
         actions.critical_hits(4),
         actions.critical_hits(5),
+        actions.sustained_hits(1),
+        actions.sustained_hits(2),
+        actions.sustained_hits(Dice(1, 3, 0)),
+        actions.lethal_hits,
+        actions.twin_linked,
         actions.melta(4),
         actions.precision,
         actions.blast,
@@ -171,11 +188,10 @@ if __name__ == "__main__":
         actions.anti("character", 4),
         actions.anti("fly", 4),
         actions.anti("vehicle", 2),
+        actions.devastating_wounds,
         actions.bypass_wound,
         actions.bypass_save,
         actions.mortal_wounds,
-        actions.reroll_hit_1,
-        actions.all_hits_critical,
         actions.all_wounds_critical,
         actions.one_shot,
         actions.assult,
@@ -205,6 +221,10 @@ if __name__ == "__main__":
                 except KeyError as e:
                     key_errors.append(e)
                     continue
+                except rl.ProbabilityTreeTooLargeError as e:
+                    print(f"Skipping due to huge probability tree: {e}")
+                    continue
+
                 finally:
                     end = dt.datetime.now()
                     print(f" {end - start}")
