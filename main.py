@@ -4,15 +4,18 @@ from dataclasses import dataclass, field
 import icecream
 import string
 import datetime as dt
+import polars as pl
 
 
 from weapon import SimpleWeapon
 from outcomes import Dice
 from model import SimpleModel
-from table import Table, Heading, Cell, CellValue, Index
 import roll as rl
 from actions import AttackOptions
 import actions
+from events import cap_damage, average_damage, cumulative_damage_probabilities
+
+from table import Table, Heading, Cell, CellValue, Index
 
 icecream.install()
 
@@ -85,64 +88,84 @@ class DataLine:
             tuple(modifiers),
         )
 
-    def create_table(self, options: AttackOptions, weapon: SimpleWeapon) -> Table:
-        table = Table()
-
-        table.set_rows([Heading(f"T {ii}", ii) for ii in range(2, 15)])
-        table.set_columns([Heading(f"Sv{ii}+", ii) for ii in range(7, 1, -1)])
+    def compute_data(self, options: AttackOptions, weapon: SimpleWeapon) -> pl.DataFrame:
+        saves = [ii for ii in range(7, 1, -1)]
+        toughnesses = [ii for ii in range(2, 15)]
+        wounds = [ii for ii in range(1, 15)]
 
         these_options = AttackOptions(options.half_range, options.cover, options.anti_active, weapon.modifiers)
 
-        full_cell_list = table.get_full_cell_list()
-
-        next = 5
-        total = len(full_cell_list)
+        nxt = 5
+        total = len(saves) * len(toughnesses)
         unique_possibilities = 0
         all_possibilities = 0
-        first = True
 
-        for jj, cell in enumerate(full_cell_list):
-            target = SimpleModel(
-                f"{cell.row.name}, {cell.column.name}",
-                cell.row.value,
-                cell.column.value,
-                1,
-                0,
-            )
-            start = dt.datetime.now()
-            damage, all_possibilities = rl.attack_roll(
-                weapon.A, weapon.WS, weapon.S, target.T, target.S, weapon.AP, weapon.D, target.FNP, these_options, True
-            )
+        damage_n = 9
+        rows = {
+            "Toughness": [],
+            "Save": [],
+            "Wounds": [],
+        }
+        rows["damage_avg"] = []
+        for ii in range(damage_n):
+            rows[f"damage_{ii + 1}+"] = []
 
-            results = damage.outcomes().items()
-            unique_possibilities = len(results)
-            end = dt.datetime.now()
-
-            if first:
-                diff = end - start
-                total_outcomes = all_possibilities[1] ** all_possibilities[0]
-                print(
-                    f"unique outcomes: {unique_possibilities:,}, all outcomes {all_possibilities}: {total_outcomes:,}"
+        for ii, sv in enumerate(saves):
+            for jj, tough in enumerate(toughnesses):
+                number = ii * len(saves) + jj
+                target = SimpleModel(
+                    name=f"{sv}, {tough}",
+                    T=tough,
+                    S=sv,
+                    W=1,
+                    FNP=0,
                 )
-                print(f"time per {diff} each of {total}, extimated {diff * total}")
-                print("[", end="", flush=True)
-                first = False
-            values = [0.0 for _ in range(table.damage_n)]
-            for key, prob in results:
-                damage = key.total()
-                for ii in range(table.damage_n):
-                    if damage >= (ii + 1):
-                        values[ii] += prob
-            new_cell = Cell(cell.row, cell.column, CellValue(True, [v * 100 for v in values]))
+                start = dt.datetime.now()
+                damage, all_possibilities = rl.attack_roll(
+                    weapon.A,
+                    weapon.WS,
+                    weapon.S,
+                    target.T,
+                    target.S,
+                    weapon.AP,
+                    weapon.D,
+                    target.FNP,
+                    these_options,
+                    True,
+                )
 
-            table.set_cells([new_cell])
+                outcomes = damage.outcomes()
+                unique_possibilities = len(outcomes)
 
-            if (100 * jj) / total > next:
-                print("=", end="", flush=True)
-                next += 5
+                end = dt.datetime.now()
+
+                if number == 0:
+                    diff = end - start
+                    total_outcomes = all_possibilities[1] ** all_possibilities[0]
+                    print(
+                        f"unique outcomes: {unique_possibilities:,}, "
+                        + f"all outcomes {all_possibilities}: {total_outcomes:,}"
+                    )
+                    print(f"time per {diff} each of {total}, extimated {diff * total}")
+                    print("[", end="", flush=True)
+
+                for cap in wounds:
+                    rows["Toughness"].append(tough)
+                    rows["Save"].append(sv)
+                    rows["Wounds"].append(cap)
+                    capped_outcomes = cap_damage(outcomes, cap)
+                    cumulative_damage_prob = cumulative_damage_probabilities(capped_outcomes, damage_n)
+                    for ii, p in enumerate(cumulative_damage_prob):
+                        rows[f"damage_{ii + 1}+"].append(p)
+
+                    rows["damage_avg"].append(average_damage(capped_outcomes))
+
+                if (100 * number) / total > nxt:
+                    print("=", end="", flush=True)
+                    nxt += 5
         print("]")
 
-        return table
+        return pl.DataFrame(rows)
 
 
 @dataclass
@@ -202,9 +225,9 @@ if __name__ == "__main__":
     key_errors = []
 
     options = AttackOptions(False, False, False, tuple())
-    input = "input"
-    output = "docs"
-    index = Index()
+    input = "test"
+    output = "data"
+    #    index = Index()
     for fle in os.listdir(input):
         if fle.endswith(".csv"):
             group_name = fle[0:-4]
@@ -217,7 +240,8 @@ if __name__ == "__main__":
                 print(weapon.stat_line())
                 print(weapon.keywords())
                 try:
-                    table = line.create_table(options, weapon)
+                    df = line.compute_data(options, weapon)
+                    print(df)
                 except KeyError as e:
                     key_errors.append(e)
                     continue
@@ -228,18 +252,12 @@ if __name__ == "__main__":
                 finally:
                     end = dt.datetime.now()
                     print(f" {end - start}")
-                output_folder = os.path.join(group_name, line.unit)
-                if not os.path.exists(os.path.join(output, output_folder)):
-                    os.makedirs(os.path.join(output, output_folder))
-                output_filename = os.path.join(output_folder, f"{line.weapon_name}.html")
-                table.write(
-                    os.path.join(output, output_filename),
-                    weapon.name,
-                    weapon.stat_line(),
-                    weapon.keywords(),
+
+                if not os.path.exists(os.path.join(output, group_name)):
+                    os.makedirs(os.path.join(output, group_name))
+                df.write_csv(
+                    os.path.join(output, group_name, f"{line.unit} - {line.weapon_name}.csv"), float_precision=4
                 )
-                index.add_file(group_name, line.unit, weapon.name, filename=output_filename)
-    index.write(os.path.join(output, "index.html"))
 
     for e in key_errors:
         print(e)

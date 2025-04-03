@@ -168,3 +168,23 @@ def average_damage(tree: dict[EventResult, Probability] | EventSet | list[EventS
     for key, prob in map.items():
         average_damage += key.total() * prob
     return average_damage
+
+
+def cumulative_damage_probabilities(
+    tree: dict[EventResult, Probability] | EventSet | list[EventSet], damage_n
+) -> dict[EventResult, Probability]:
+    map: dict[EventResult, Probability] = {}
+    if isinstance(tree, dict):
+        map = tree
+    elif isinstance(tree, EventSet):
+        map = tree.outcomes()
+    elif isinstance(tree, list):
+        map = Together(tree).outcomes()
+
+    values = [0.0 for _ in range(damage_n)]
+    for key, prob in map.items():
+        damage = key.total()
+        for ii in range(damage_n):
+            if damage >= (ii + 1):
+                values[ii] += prob
+    return values
