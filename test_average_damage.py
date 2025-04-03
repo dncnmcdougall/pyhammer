@@ -1,3 +1,5 @@
+# ruff: noqa: N802, N806
+
 from icecream import ic
 
 import roll as rl
@@ -24,10 +26,8 @@ def test_A1D1():
         reroll=True,
     )
 
-    fail_hit = 1 / 6
     pass_hit = 5 / 6
 
-    fail_wound = 1 / 6
     pass_wound = 5 / 6
 
     avg_dam = average_damage(damage.outcomes())
@@ -50,10 +50,8 @@ def test_A1D2():
         reroll=True,
     )
 
-    fail_hit = 1 / 6
     pass_hit = 5 / 6
 
-    fail_wound = 1 / 6
     pass_wound = 5 / 6
 
     avg_dam = average_damage(damage.outcomes())
@@ -106,10 +104,8 @@ def test_A1Dd3():
 
     third = 1 / 3
 
-    fail_hit = 1 / 6
     pass_hit = 5 / 6
 
-    fail_wound = 1 / 6
     pass_wound = 5 / 6
 
     avg_dam = average_damage(damage.outcomes())

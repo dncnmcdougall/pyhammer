@@ -165,7 +165,6 @@ def average_damage(tree: dict[EventResult, Probability] | EventSet | list[EventS
         map = Together(tree).outcomes()
 
     average_damage = 0
-    res = defaultdict(float)
     for key, prob in map.items():
         average_damage += key.total() * prob
     return average_damage

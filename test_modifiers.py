@@ -1,3 +1,5 @@
+# ruff: noqa: N802, N806
+
 from icecream import ic
 
 import roll as rl
