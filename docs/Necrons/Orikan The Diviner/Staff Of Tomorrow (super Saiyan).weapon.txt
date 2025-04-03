@@ -1,0 +1,2 @@
+R:0" A:6 WS:3 S:12 AP:-3 D:d3
+all_wounds_critical, devastating_wounds

@@ -1,0 +1,2 @@
+R:48" A:4 WS:4 S:9 AP:-1 D:3
+pistol

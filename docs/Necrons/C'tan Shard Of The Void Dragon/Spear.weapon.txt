@@ -1,0 +1,2 @@
+R:12" A:1 WS:2 S:4 AP:-3 D:d6+2
+anti_vehicle_2

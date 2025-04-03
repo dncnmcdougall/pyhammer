@@ -1,0 +1,2 @@
+R:12" A:1 WS:3 S:7 AP:-2 D:1
+pistol

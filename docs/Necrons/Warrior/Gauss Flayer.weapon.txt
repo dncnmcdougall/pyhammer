@@ -1,0 +1,2 @@
+R:24" A:1 WS:4 S:4 AP:0 D:1
+rapid_fire_1, lethal_hits

@@ -1,0 +1,2 @@
+R:18" A:3d6 WS:0 S:6 AP:-2 D:1
+torrent, devastating_wounds, ignores_cover

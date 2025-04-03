@@ -1,0 +1,2 @@
+R:0" A:6 WS:5 S:2 AP:0 D:1
+lethal_hits

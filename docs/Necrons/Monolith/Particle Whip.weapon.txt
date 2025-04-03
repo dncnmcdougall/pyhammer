@@ -1,0 +1,2 @@
+R:24" A:3d6 WS:3 S:8 AP:-1 D:2
+blast, devastating_wounds

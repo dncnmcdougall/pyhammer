@@ -1,0 +1,2 @@
+R:18" A:d6+1 WS:3 S:4 AP:0 D:1
+blast, twin-linked

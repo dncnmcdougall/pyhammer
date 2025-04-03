@@ -118,12 +118,12 @@ Lokhust Destroyer,Gauss cannon (closest),24,3,3,5,-2,2,Re-roll Hit 1,Lethal Hits
 Lokhust Destroyer,Close combat,0,2,3,4,0,1,,,
 Lokhust Heavy Destroyer,Enmitic Exterminator (moved),36,6,3,6,-1,1,Rapid Fire 6,Sustained Hits 1,
 Lokhust Heavy Destroyer,Enmitic Exterminator (heavy),36,6,2,6,-1,1,Rapid Fire 6,Sustained Hits 1,
-Lokhust Heavy Destroyer,"Enmitic Exterminator (moved and closest)",36,6,3,6,-1,1,Re-roll Hit 1,Rapid Fire 6,Sustained Hits 1
-Lokhust Heavy Destroyer,"Enmitic Exterminator (heavy and closest)",36,6,2,6,-1,1,Re-roll Hit 1,Rapid Fire 6,Sustained Hits 1
+Lokhust Heavy Destroyer,Enmitic Exterminator (moved and closest),36,6,3,6,-1,1,Re-roll Hit 1,Rapid Fire 6,Sustained Hits 1
+Lokhust Heavy Destroyer,Enmitic Exterminator (heavy and closest),36,6,2,6,-1,1,Re-roll Hit 1,Rapid Fire 6,Sustained Hits 1
 Lokhust Heavy Destroyer,Gauss Destructor (moved),48,1,3,14,-4,6,Lethal Hits,,
 Lokhust Heavy Destroyer,Gauss Destructor (heavy),48,1,2,14,-4,6,Lethal Hits,,
-Lokhust Heavy Destroyer,"Gauss Destructor (moved and closest)",48,1,3,14,-4,6,Re-roll Hit 1,Lethal Hits,
-Lokhust Heavy Destroyer,"Gauss Destructor (heavy and closest)",48,1,2,14,-4,6,Re-roll Hit 1,Lethal Hits,
+Lokhust Heavy Destroyer,Gauss Destructor (moved and closest),48,1,3,14,-4,6,Re-roll Hit 1,Lethal Hits,
+Lokhust Heavy Destroyer,Gauss Destructor (heavy and closest),48,1,2,14,-4,6,Re-roll Hit 1,Lethal Hits,
 Lokhust Heavy Destroyer,Close combat,0,2,3,4,0,1,,,
 Lychgaurd,Hyperphase Sword,0,3,3,6,-2,1,,,
 Lychgaurd,Warscythe,0,2,3,8,-3,2,Devastating Wounds,,

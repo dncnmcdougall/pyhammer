@@ -1,0 +1,2 @@
+R:48" A:1 WS:2 S:14 AP:-4 D:6
+lethal_hits

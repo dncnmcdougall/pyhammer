@@ -1,0 +1,2 @@
+R:24" A:1 WS:2 S:3 AP:-2 D:6
+anti_character_4, devastating_wounds, precision

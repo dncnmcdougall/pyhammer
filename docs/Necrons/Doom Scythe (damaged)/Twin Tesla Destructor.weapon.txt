@@ -1,0 +1,2 @@
+R:36" A:6 WS:4 S:8 AP:0 D:2
+twin-linked, sustained_hits_2

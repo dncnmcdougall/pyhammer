@@ -1,0 +1,2 @@
+R:24" A:1 WS:5 S:4 AP:0 D:1
+rapid_fire_3, twin-linked, lethal_hits

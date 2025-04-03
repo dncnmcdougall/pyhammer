@@ -1,0 +1,2 @@
+R:0" A:3 WS:4 S:8 AP:-2 D:2
+twin-linked

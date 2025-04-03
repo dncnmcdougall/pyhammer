@@ -1,0 +1,2 @@
+R:36" A:3 WS:4 S:4 AP:-1 D:1
+rapid_fire_3

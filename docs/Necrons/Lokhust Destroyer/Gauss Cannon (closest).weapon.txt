@@ -1,0 +1,2 @@
+R:24" A:3 WS:3 S:5 AP:-2 D:2
+re-roll hit 1, lethal_hits

@@ -1,0 +1,2 @@
+R:18" A:2 WS:3 S:9 AP:-4 D:d6
+melta_4

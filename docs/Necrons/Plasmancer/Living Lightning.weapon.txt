@@ -1,0 +1,2 @@
+R:18" A:4 WS:4 S:100 AP:-100 D:1
+bypass_wound, bypass_save, mortal_wounds

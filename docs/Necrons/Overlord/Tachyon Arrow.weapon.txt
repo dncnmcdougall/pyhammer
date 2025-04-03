@@ -1,0 +1,2 @@
+R:72" A:1 WS:2 S:16 AP:-5 D:d6+2
+one_shot

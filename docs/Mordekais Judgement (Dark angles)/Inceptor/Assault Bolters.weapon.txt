@@ -1,0 +1,2 @@
+R:18" A:3 WS:3 S:5 AP:-1 D:2
+pistol, sustained_hits_2, twin-linked

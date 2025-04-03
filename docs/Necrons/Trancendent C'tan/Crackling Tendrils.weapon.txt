@@ -1,0 +1,2 @@
+R:0" A:8 WS:2 S:9 AP:-3 D:d6
+sustained_hits_1

@@ -3,24 +3,25 @@
             <head>
             <meta http-equiv="content-type" content="text/html; charset=UTF-8">
             <style>
-            
+
 .val1 {
+display: table-cell;
 }
 
 .val1_1 {
-background: hsl(135, 100%, 100.0%);
+background: hsl(0, 100%, 100.0%);
 }
 
 .val1_2 {
-background: hsl(135, 100%, 80.0%);
+background: hsl(0, 100%, 80.0%);
 }
 
 .val1_3 {
-background: hsl(135, 100%, 60.0%);
+background: hsl(0, 100%, 60.0%);
 }
 
 .val1_4 {
-background: hsl(135, 100%, 40.0%);
+background: hsl(0, 100%, 40.0%);
 }
 
 .val2 {
@@ -28,19 +29,19 @@ display: none;
 }
 
 .val2_1 {
-background: hsl(200, 100%, 100.0%);
+background: hsl(60, 100%, 100.0%);
 }
 
 .val2_2 {
-background: hsl(200, 100%, 80.0%);
+background: hsl(60, 100%, 80.0%);
 }
 
 .val2_3 {
-background: hsl(200, 100%, 60.0%);
+background: hsl(60, 100%, 60.0%);
 }
 
 .val2_4 {
-background: hsl(200, 100%, 40.0%);
+background: hsl(60, 100%, 40.0%);
 }
 
 .val3 {
@@ -48,19 +49,19 @@ display: none;
 }
 
 .val3_1 {
-background: hsl(320, 100%, 100.0%);
+background: hsl(120, 100%, 100.0%);
 }
 
 .val3_2 {
-background: hsl(320, 100%, 80.0%);
+background: hsl(120, 100%, 80.0%);
 }
 
 .val3_3 {
-background: hsl(320, 100%, 60.0%);
+background: hsl(120, 100%, 60.0%);
 }
 
 .val3_4 {
-background: hsl(320, 100%, 40.0%);
+background: hsl(120, 100%, 40.0%);
 }
 
 .val4 {
@@ -68,19 +69,19 @@ display: none;
 }
 
 .val4_1 {
-background: hsl(30, 100%, 100.0%);
+background: hsl(180, 100%, 100.0%);
 }
 
 .val4_2 {
-background: hsl(30, 100%, 80.0%);
+background: hsl(180, 100%, 80.0%);
 }
 
 .val4_3 {
-background: hsl(30, 100%, 60.0%);
+background: hsl(180, 100%, 60.0%);
 }
 
 .val4_4 {
-background: hsl(30, 100%, 40.0%);
+background: hsl(180, 100%, 40.0%);
 }
 
 .val5 {
@@ -88,19 +89,39 @@ display: none;
 }
 
 .val5_1 {
-background: hsl(0, 100%, 100.0%);
+background: hsl(240, 100%, 100.0%);
 }
 
 .val5_2 {
-background: hsl(0, 100%, 80.0%);
+background: hsl(240, 100%, 80.0%);
 }
 
 .val5_3 {
-background: hsl(0, 100%, 60.0%);
+background: hsl(240, 100%, 60.0%);
 }
 
 .val5_4 {
-background: hsl(0, 100%, 40.0%);
+background: hsl(240, 100%, 40.0%);
+}
+
+.val6 {
+display: none;
+}
+
+.val6_1 {
+background: hsl(300, 100%, 100.0%);
+}
+
+.val6_2 {
+background: hsl(300, 100%, 80.0%);
+}
+
+.val6_3 {
+background: hsl(300, 100%, 60.0%);
+}
+
+.val6_4 {
+background: hsl(300, 100%, 40.0%);
 }
 
 </style>
@@ -109,495 +130,1263 @@ background: hsl(0, 100%, 40.0%);
 <table>
 <tr>
 <th>Flensing Caw</th>
-<td>Show 1+ damage<input type="checkbox" id="val1"checked oninput="changeFunc(event)"/></td>
+<td>Show Sv 7+<input type="checkbox" id="val1"checked oninput="changeFunc(event)"/></td>
 </tr>
 <tr>
 <th>R:0" A:8 WS:2 S:6 AP:-1 D:1</th>
-<td>Show 2+ damage<input type="checkbox" id="val2" oninput="changeFunc(event)"/></td>
+<td>Show Sv 6+<input type="checkbox" id="val2" oninput="changeFunc(event)"/></td>
 </tr>
 <tr>
 <th></th>
-<td>Show 3+ damage<input type="checkbox" id="val3" oninput="changeFunc(event)"/></td>
+<td>Show Sv 5+<input type="checkbox" id="val3" oninput="changeFunc(event)"/></td>
 </tr>
 <tr>
 <th></th>
-<td>Show 4+ damage<input type="checkbox" id="val4" oninput="changeFunc(event)"/></td>
+<td>Show Sv 4+<input type="checkbox" id="val4" oninput="changeFunc(event)"/></td>
 </tr>
 <tr>
 <th></th>
-<td>Show 5+ damage<input type="checkbox" id="val5" oninput="changeFunc(event)"/></td>
+<td>Show Sv 3+<input type="checkbox" id="val5" oninput="changeFunc(event)"/></td>
+</tr>
+<tr>
+<th></th>
+<td>Show Sv 2+<input type="checkbox" id="val6" oninput="changeFunc(event)"/></td>
 </tr>
 </table>
 <table>
 <tr>
 <th></th>
-<th class="main_heading" colspan=1>Sv7+</th>
-<th class="main_heading" colspan=1>Sv6+</th>
-<th class="main_heading" colspan=1>Sv5+</th>
-<th class="main_heading" colspan=1>Sv4+</th>
-<th class="main_heading" colspan=1>Sv3+</th>
-<th class="main_heading" colspan=1>Sv2+</th>
+<th class="main_heading" colspan=1>W 1</th>
+<th class="main_heading" colspan=1>W 2</th>
+<th class="main_heading" colspan=1>W 3</th>
+<th class="main_heading" colspan=1>W 4</th>
+<th class="main_heading" colspan=1>W 5</th>
+<th class="main_heading" colspan=1>W 6</th>
+<th class="main_heading" colspan=1>W 7</th>
+<th class="main_heading" colspan=1>W 8</th>
+<th class="main_heading" colspan=1>W 9</th>
+<th class="main_heading" colspan=1>W 10</th>
+<th class="main_heading" colspan=1>W 11</th>
+<th class="main_heading" colspan=1>W 12</th>
+<th class="main_heading" colspan=1>W 13</th>
+<th class="main_heading" colspan=1>W 14</th>
 </tr>
 <th></th>
-<th class="val1">1+</th>
-<th class="val2">2+</th>
-<th class="val3">3+</th>
-<th class="val4">4+</th>
-<th class="val5">5+</th>
-<th class="val1">1+</th>
-<th class="val2">2+</th>
-<th class="val3">3+</th>
-<th class="val4">4+</th>
-<th class="val5">5+</th>
-<th class="val1">1+</th>
-<th class="val2">2+</th>
-<th class="val3">3+</th>
-<th class="val4">4+</th>
-<th class="val5">5+</th>
-<th class="val1">1+</th>
-<th class="val2">2+</th>
-<th class="val3">3+</th>
-<th class="val4">4+</th>
-<th class="val5">5+</th>
-<th class="val1">1+</th>
-<th class="val2">2+</th>
-<th class="val3">3+</th>
-<th class="val4">4+</th>
-<th class="val5">5+</th>
-<th class="val1">1+</th>
-<th class="val2">2+</th>
-<th class="val3">3+</th>
-<th class="val4">4+</th>
-<th class="val5">5+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
+<th class="val1">Sv 7+</th>
+<th class="val2">Sv 6+</th>
+<th class="val3">Sv 5+</th>
+<th class="val4">Sv 4+</th>
+<th class="val5">Sv 3+</th>
+<th class="val6">Sv 2+</th>
 </tr>
 <tr>
 <td>T 2</td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 100 </td>
-<td class="val3 val3_4"> 99 </td>
-<td class="val4 val4_4"> 94 </td>
-<td class="val5 val5_4"> 80 </td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 100 </td>
-<td class="val3 val3_4"> 99 </td>
-<td class="val4 val4_4"> 94 </td>
-<td class="val5 val5_4"> 80 </td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 99 </td>
-<td class="val3 val3_4"> 94 </td>
-<td class="val4 val4_4"> 79 </td>
-<td class="val5 val5_3"> 54 </td>
-<td class="val1 val1_4"> 99 </td>
-<td class="val2 val2_4"> 95 </td>
-<td class="val3 val3_4"> 80 </td>
-<td class="val4 val4_3"> 55 </td>
-<td class="val5 val5_2"> 29 </td>
-<td class="val1 val1_4"> 97 </td>
-<td class="val2 val2_4"> 83 </td>
-<td class="val3 val3_3"> 57 </td>
-<td class="val4 val4_2"> 29 </td>
-<td class="val5 val5_1"> 10 </td>
-<td class="val1 val1_4"> 88 </td>
-<td class="val2 val2_3"> 59 </td>
-<td class="val3 val3_2"> 28 </td>
-<td class="val4 val4_1"> 9 </td>
-<td class="val5 val5_1"> 2 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
+<td class="val1 val1_4"> 5.6 </td>
+<td class="val2 val2_4"> 5.6 </td>
+<td class="val3 val3_4"> 4.6 </td>
+<td class="val4 val4_3"> 3.7 </td>
+<td class="val5 val5_2"> 2.8 </td>
+<td class="val6 val6_2"> 1.9 </td>
 </tr>
 <tr>
 <td>T 3</td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 98 </td>
-<td class="val3 val3_4"> 92 </td>
-<td class="val4 val4_4"> 75 </td>
-<td class="val5 val5_2"> 49 </td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 98 </td>
-<td class="val3 val3_4"> 92 </td>
-<td class="val4 val4_4"> 75 </td>
-<td class="val5 val5_2"> 49 </td>
-<td class="val1 val1_4"> 99 </td>
-<td class="val2 val2_4"> 95 </td>
-<td class="val3 val3_4"> 80 </td>
-<td class="val4 val4_3"> 55 </td>
-<td class="val5 val5_2"> 29 </td>
-<td class="val1 val1_4"> 98 </td>
-<td class="val2 val2_4"> 86 </td>
-<td class="val3 val3_3"> 62 </td>
-<td class="val4 val4_2"> 34 </td>
-<td class="val5 val5_1"> 13 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
 </tr>
 <tr>
 <td>T 4</td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 98 </td>
-<td class="val3 val3_4"> 92 </td>
-<td class="val4 val4_4"> 75 </td>
-<td class="val5 val5_2"> 49 </td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 98 </td>
-<td class="val3 val3_4"> 92 </td>
-<td class="val4 val4_4"> 75 </td>
-<td class="val5 val5_2"> 49 </td>
-<td class="val1 val1_4"> 99 </td>
-<td class="val2 val2_4"> 95 </td>
-<td class="val3 val3_4"> 80 </td>
-<td class="val4 val4_3"> 55 </td>
-<td class="val5 val5_2"> 29 </td>
-<td class="val1 val1_4"> 98 </td>
-<td class="val2 val2_4"> 86 </td>
-<td class="val3 val3_3"> 62 </td>
-<td class="val4 val4_2"> 34 </td>
-<td class="val5 val5_1"> 13 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
 </tr>
 <tr>
 <td>T 5</td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 98 </td>
-<td class="val3 val3_4"> 92 </td>
-<td class="val4 val4_4"> 75 </td>
-<td class="val5 val5_2"> 49 </td>
-<td class="val1 val1_4"> 100 </td>
-<td class="val2 val2_4"> 98 </td>
-<td class="val3 val3_4"> 92 </td>
-<td class="val4 val4_4"> 75 </td>
-<td class="val5 val5_2"> 49 </td>
-<td class="val1 val1_4"> 99 </td>
-<td class="val2 val2_4"> 95 </td>
-<td class="val3 val3_4"> 80 </td>
-<td class="val4 val4_3"> 55 </td>
-<td class="val5 val5_2"> 29 </td>
-<td class="val1 val1_4"> 98 </td>
-<td class="val2 val2_4"> 86 </td>
-<td class="val3 val3_3"> 62 </td>
-<td class="val4 val4_2"> 34 </td>
-<td class="val5 val5_1"> 13 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
+<td class="val1 val1_3"> 4.4 </td>
+<td class="val2 val2_3"> 4.4 </td>
+<td class="val3 val3_3"> 3.7 </td>
+<td class="val4 val4_2"> 3.0 </td>
+<td class="val5 val5_2"> 2.2 </td>
+<td class="val6 val6_1"> 1.5 </td>
 </tr>
 <tr>
 <td>T 6</td>
-<td class="val1 val1_4"> 99 </td>
-<td class="val2 val2_4"> 91 </td>
-<td class="val3 val3_3"> 72 </td>
-<td class="val4 val4_2"> 44 </td>
-<td class="val5 val5_1"> 20 </td>
-<td class="val1 val1_4"> 99 </td>
-<td class="val2 val2_4"> 91 </td>
-<td class="val3 val3_3"> 72 </td>
-<td class="val4 val4_2"> 44 </td>
-<td class="val5 val5_1"> 20 </td>
-<td class="val1 val1_4"> 97 </td>
-<td class="val2 val2_4"> 83 </td>
-<td class="val3 val3_3"> 57 </td>
-<td class="val4 val4_2"> 29 </td>
-<td class="val5 val5_1"> 10 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 85 </td>
-<td class="val2 val2_3"> 52 </td>
-<td class="val3 val3_1"> 22 </td>
-<td class="val4 val4_1"> 6 </td>
-<td class="val5 val5_1"> 1 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
+<td class="val1 val1_3"> 3.3 </td>
+<td class="val2 val2_3"> 3.3 </td>
+<td class="val3 val3_2"> 2.8 </td>
+<td class="val4 val4_2"> 2.2 </td>
+<td class="val5 val5_2"> 1.7 </td>
+<td class="val6 val6_1"> 1.1 </td>
 </tr>
 <tr>
 <td>T 7</td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 88 </td>
-<td class="val2 val2_3"> 59 </td>
-<td class="val3 val3_2"> 28 </td>
-<td class="val4 val4_1"> 9 </td>
-<td class="val5 val5_1"> 2 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
 </tr>
 <tr>
 <td>T 8</td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 88 </td>
-<td class="val2 val2_3"> 59 </td>
-<td class="val3 val3_2"> 28 </td>
-<td class="val4 val4_1"> 9 </td>
-<td class="val5 val5_1"> 2 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
 </tr>
 <tr>
 <td>T 9</td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 88 </td>
-<td class="val2 val2_3"> 59 </td>
-<td class="val3 val3_2"> 28 </td>
-<td class="val4 val4_1"> 9 </td>
-<td class="val5 val5_1"> 2 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
 </tr>
 <tr>
 <td>T 10</td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 88 </td>
-<td class="val2 val2_3"> 59 </td>
-<td class="val3 val3_2"> 28 </td>
-<td class="val4 val4_1"> 9 </td>
-<td class="val5 val5_1"> 2 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
 </tr>
 <tr>
 <td>T 11</td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 93 </td>
-<td class="val2 val2_3"> 70 </td>
-<td class="val3 val3_2"> 39 </td>
-<td class="val4 val4_1"> 16 </td>
-<td class="val5 val5_1"> 4 </td>
-<td class="val1 val1_4"> 88 </td>
-<td class="val2 val2_3"> 59 </td>
-<td class="val3 val3_2"> 28 </td>
-<td class="val4 val4_1"> 9 </td>
-<td class="val5 val5_1"> 2 </td>
-<td class="val1 val1_4"> 81 </td>
-<td class="val2 val2_2"> 45 </td>
-<td class="val3 val3_1"> 17 </td>
-<td class="val4 val4_1"> 4 </td>
-<td class="val5 val5_1"> 1 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
+<td class="val1 val1_2"> 2.2 </td>
+<td class="val2 val2_2"> 2.2 </td>
+<td class="val3 val3_2"> 1.9 </td>
+<td class="val4 val4_1"> 1.5 </td>
+<td class="val5 val5_1"> 1.1 </td>
+<td class="val6 val6_1"> 0.7 </td>
 </tr>
 <tr>
 <td>T 12</td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 63 </td>
-<td class="val2 val2_1"> 23 </td>
-<td class="val3 val3_1"> 6 </td>
-<td class="val4 val4_1"> 1 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_2"> 44 </td>
-<td class="val2 val2_1"> 10 </td>
-<td class="val3 val3_1"> 1 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_2"> 32 </td>
-<td class="val2 val2_1"> 5 </td>
-<td class="val3 val3_1"> 0 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
 </tr>
 <tr>
 <td>T 13</td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 63 </td>
-<td class="val2 val2_1"> 23 </td>
-<td class="val3 val3_1"> 6 </td>
-<td class="val4 val4_1"> 1 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_2"> 44 </td>
-<td class="val2 val2_1"> 10 </td>
-<td class="val3 val3_1"> 1 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_2"> 32 </td>
-<td class="val2 val2_1"> 5 </td>
-<td class="val3 val3_1"> 0 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
 </tr>
 <tr>
 <td>T 14</td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 70 </td>
-<td class="val2 val2_2"> 31 </td>
-<td class="val3 val3_1"> 9 </td>
-<td class="val4 val4_1"> 2 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 63 </td>
-<td class="val2 val2_1"> 23 </td>
-<td class="val3 val3_1"> 6 </td>
-<td class="val4 val4_1"> 1 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_3"> 54 </td>
-<td class="val2 val2_1"> 17 </td>
-<td class="val3 val3_1"> 3 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_2"> 44 </td>
-<td class="val2 val2_1"> 10 </td>
-<td class="val3 val3_1"> 1 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
-<td class="val1 val1_2"> 32 </td>
-<td class="val2 val2_1"> 5 </td>
-<td class="val3 val3_1"> 0 </td>
-<td class="val4 val4_1"> 0 </td>
-<td class="val5 val5_1"> 0 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
+<td class="val1 val1_1"> 1.1 </td>
+<td class="val2 val2_1"> 1.1 </td>
+<td class="val3 val3_1"> 0.9 </td>
+<td class="val4 val4_1"> 0.7 </td>
+<td class="val5 val5_1"> 0.6 </td>
+<td class="val6 val6_1"> 0.4 </td>
 </tr>
 </table>
 
@@ -620,6 +1409,7 @@ background: hsl(0, 100%, 40.0%);
 + document.getElementById("val3").checked
 + document.getElementById("val4").checked
 + document.getElementById("val5").checked
++ document.getElementById("val6").checked
 
                 let elements = document.querySelectorAll('.main_heading');
                 for( let ii=0; ii < elements.length; ii++) {

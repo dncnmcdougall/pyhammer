@@ -1,0 +1,2 @@
+R:48" A:d6+1 WS:3 S:5 AP:0 D:1
+blast

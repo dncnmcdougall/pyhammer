@@ -1,0 +1,2 @@
+R:24" A:2 WS:3 S:10 AP:-3 D:3
+devastating_wounds

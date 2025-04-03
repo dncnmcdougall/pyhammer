@@ -1,0 +1,2 @@
+R:36" A:3 WS:3 S:16 AP:-4 D:d6+1
+sustained_hits_d3

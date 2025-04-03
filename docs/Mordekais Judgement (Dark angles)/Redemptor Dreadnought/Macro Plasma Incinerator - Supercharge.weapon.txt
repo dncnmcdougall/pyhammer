@@ -1,0 +1,2 @@
+R:36" A:d6+1 WS:3 S:9 AP:-4 D:3
+blast, hazardous

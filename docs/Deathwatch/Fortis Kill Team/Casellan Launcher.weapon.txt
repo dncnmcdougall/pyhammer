@@ -1,0 +1,2 @@
+R:36" A:d3 WS:3 S:4 AP:0 D:1
+blast, indirect_fire

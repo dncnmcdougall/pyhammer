@@ -1,0 +1,2 @@
+R:24" A:2 WS:3 S:5 AP:0 D:1
+twin-linked, sustained_hits_2, assult

@@ -1,0 +1,2 @@
+R:24" A:6 WS:3 S:7 AP:0 D:1
+anti_fly_4, sustained_hits_2

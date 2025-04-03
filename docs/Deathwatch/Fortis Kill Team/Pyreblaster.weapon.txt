@@ -1,0 +1,2 @@
+R:12" A:d6 WS:0 S:5 AP:0 D:1
+ignores_cover, torrent

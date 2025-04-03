@@ -1,0 +1,2 @@
+R:0" A:4 WS:3 S:7 AP:-2 D:2
+devastating_wounds

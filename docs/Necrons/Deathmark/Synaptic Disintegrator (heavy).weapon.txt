@@ -1,0 +1,2 @@
+R:36" A:1 WS:2 S:5 AP:-2 D:2
+precision

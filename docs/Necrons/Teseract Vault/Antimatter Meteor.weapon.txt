@@ -1,0 +1,2 @@
+R:24" A:d6+3 WS:3 S:10 AP:-3 D:3
+blast, devastating_wounds, indirect_fire
