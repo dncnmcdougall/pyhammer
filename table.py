@@ -28,13 +28,17 @@ class Table:
         self.cells: dict[Heading, dict[Heading, Cell]] = {}
 
         self.columns = []
+        self.inner_columns = []
         self.rows = []
 
         self.level_n = 4
-        self.damage_n = 5
+        self.level_max = 100
 
     def set_columns(self, columns: list[Heading]) -> None:
         self.columns = columns
+
+    def set_inner_columns(self, inner_columns: list[Heading]) -> None:
+        self.inner_columns = inner_columns
 
     def set_rows(self, rows: list[Heading]) -> None:
         self.rows = rows
@@ -59,12 +63,12 @@ class Table:
 
     def _cell_item(self, value: float, cls: str) -> str:
         cls_suffix = ""
-        step = 100 / self.level_n
+        step = self.level_max / self.level_n
         for ii in range(self.level_n):
-            if value < (ii + 1) * step:
+            if value <= (ii + 1) * step:
                 cls_suffix = str(ii + 1)
                 break
-        return f'<td class="{cls} {cls}_{cls_suffix}"> {value:.0f} </td>\n'
+        return f'<td class="{cls} {cls}_{cls_suffix}"> {value:.1f} </td>\n'
 
     def write(self, filename, *headings: str):
         with open(filename, "w") as fle:
@@ -74,20 +78,22 @@ class Table:
             <meta http-equiv="content-type" content="text/html; charset=UTF-8">
             <style>
             """)
-            fle.write("\n")
+            fle.write("\n")
 
-            hues = [135, 200, 320, 30, 0]
+            hue_diff = int(360 / len(self.inner_columns))
             step = 60 / (self.level_n - 1)
-            for ii in range(self.damage_n):
+            for ii, _ in enumerate(self.inner_columns):
                 fle.write(f".val{ii + 1} {{\n")
                 if ii > 0:
                     fle.write("display: none;\n")
+                else:
+                    fle.write("display: table-cell;\n")
                 fle.write("}\n")
                 fle.write("\n")
 
                 for jj in range(self.level_n):
                     fle.write(f".val{ii + 1}_{jj + 1} {{\n")
-                    fle.write(f"background: hsl({hues[ii]}, 100%, {100 - (jj) * step}%);\n")
+                    fle.write(f"background: hsl({hue_diff * ii}, 100%, {100 - (jj) * step}%);\n")
                     fle.write("}\n")
                     fle.write("\n")
             fle.write("</style>\n")
@@ -96,17 +102,18 @@ class Table:
 
             # Heading and controls table
             fle.write("<table>\n")
-            cnt = max(len(headings), self.damage_n)
+            cnt = max(len(headings), len(self.inner_columns))
             for ii in range(cnt):
                 fle.write("<tr>\n")
                 if ii < len(headings):
                     fle.write(f"<th>{headings[ii]}</th>\n")
                 else:
                     fle.write("<th></th>\n")
-                if ii < self.damage_n:
+                if ii < len(self.inner_columns):
                     state = "checked" if ii == 0 else ""
                     num = ii + 1
-                    fle.write(f'<td>Show {num}+ damage<input type="checkbox" id="val{num}"')
+                    value = self.inner_columns[ii].name
+                    fle.write(f'<td>Show {value}<input type="checkbox" id="val{num}"')
                     fle.write(f'{state} oninput="changeFunc(event)"/></td>\n')
                 else:
                     fle.write("<td></td>\n")
@@ -122,19 +129,23 @@ class Table:
             fle.write("</tr>\n")
             fle.write("<th></th>\n")
             for _ in self.columns:
-                for ii in range(self.damage_n):
-                    fle.write(f'<th class="val{ii + 1}">{ii + 1}+</th>\n')
+                for ii, inner_column in enumerate(self.inner_columns):
+                    fle.write(f'<th class="val{ii + 1}">{inner_column.name}</th>\n')
             fle.write("</tr>\n")
             for row in self.rows:
                 fle.write("<tr>\n")
                 fle.write(f"<td>{row.name}</td>\n")
                 for cell in self.cells[row].values():
                     if not cell.value.is_set:
-                        for ii in range(self.damage_n):
+                        for ii, _ in enumerate(self.inner_columns):
                             fle.write(f'<td class="val{ii + 1}">-</td>\n')
                     else:
-                        for ii in range(self.damage_n):
-                            fle.write(self._cell_item(cell.value.values[ii], f"val{ii + 1}"))
+                        cell_value_count = len(cell.value.values)
+                        for ii, _ in enumerate(self.inner_columns):
+                            if ii < cell_value_count:
+                                fle.write(self._cell_item(cell.value.values[ii], f"val{ii + 1}"))
+                            else:
+                                fle.write(f'<td class="val{ii + 1}">-</td>\n')
                 fle.write("</tr>\n")
             fle.write("</table>\n")
 
@@ -155,7 +166,7 @@ class Table:
                 }
 
                 let cols = """)
-            for ii in range(self.damage_n):
+            for ii, _ in enumerate(self.inner_columns):
                 fle.write(f'+ document.getElementById("val{ii + 1}").checked\n')
 
             fle.write("""

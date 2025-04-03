@@ -6,7 +6,6 @@ import string
 import datetime as dt
 import polars as pl
 
-
 from weapon import SimpleWeapon
 from outcomes import Dice
 from model import SimpleModel
@@ -14,8 +13,6 @@ import roll as rl
 from actions import AttackOptions
 import actions
 from events import cap_damage, average_damage, cumulative_damage_probabilities
-
-from table import Table, Heading, Cell, CellValue, Index
 
 icecream.install()
 
@@ -233,32 +230,43 @@ if __name__ == "__main__":
             datafile = DataFile(os.path.join(input, fle))
             datafile.read()
             for line in datafile.lines:
-                start = dt.datetime.now()
                 weapon = line.create_weapon(modifier_map)
                 print(f"Process {group_name} {line.unit} {line.weapon_name}")
                 print(weapon.stat_line())
                 print(weapon.keywords())
-                try:
-                    df = line.compute_data(options, weapon)
-                except KeyError as e:
-                    key_errors.append(e)
-                    continue
-                except rl.ProbabilityTreeTooLargeError as e:
-                    print(f"Skipping due to huge probability tree: {e}")
-                    continue
-
-                finally:
-                    end = dt.datetime.now()
-                    print(f" {end - start}")
 
                 output_folder = os.path.join(group_name, line.unit)
                 if not os.path.exists(os.path.join(output, output_folder)):
                     os.makedirs(os.path.join(output, output_folder))
-                output_filename = os.path.join(output_folder, f"{line.weapon_name}.csv")
-                df.write_csv(
-                    os.path.join(output, output_filename),
-                    float_precision=4,
-                )
+                output_filename = os.path.join(output_folder, line.weapon_name)
+
+                if os.path.exists(os.path.join(output, f"{output_filename}.csv")):
+                    df = pl.read_csv(
+                        os.path.join(output, f"{output_filename}.csv"),
+                    )
+                    print("Not reprocessing")
+                else:
+                    start = dt.datetime.now()
+                    try:
+                        df = line.compute_data(options, weapon)
+                        df.write_csv(
+                            os.path.join(output, f"{output_filename}.csv"),
+                            float_precision=4,
+                        )
+                        pass
+                    except KeyError as e:
+                        key_errors.append(e)
+                        continue
+                    except rl.ProbabilityTreeTooLargeError as e:
+                        print(f"Skipping due to huge probability tree: {e}")
+                        continue
+                    finally:
+                        end = dt.datetime.now()
+                        print(f" {end - start}")
+
+                with open(os.path.join(output, f"{output_filename}.weapon.txt"), "w") as fle:
+                    fle.write(weapon.stat_line() + "\n")
+                    fle.write(weapon.keywords() + "\n")
 
     for e in key_errors:
         print(e)
