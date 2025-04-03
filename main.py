@@ -225,9 +225,8 @@ if __name__ == "__main__":
     key_errors = []
 
     options = AttackOptions(False, False, False, tuple())
-    input = "test"
-    output = "data"
-    #    index = Index()
+    input = "input"
+    output = "docs"
     for fle in os.listdir(input):
         if fle.endswith(".csv"):
             group_name = fle[0:-4]
@@ -241,7 +240,6 @@ if __name__ == "__main__":
                 print(weapon.keywords())
                 try:
                     df = line.compute_data(options, weapon)
-                    print(df)
                 except KeyError as e:
                     key_errors.append(e)
                     continue
@@ -253,10 +251,13 @@ if __name__ == "__main__":
                     end = dt.datetime.now()
                     print(f" {end - start}")
 
-                if not os.path.exists(os.path.join(output, group_name)):
-                    os.makedirs(os.path.join(output, group_name))
+                output_folder = os.path.join(group_name, line.unit)
+                if not os.path.exists(os.path.join(output, output_folder)):
+                    os.makedirs(os.path.join(output, output_folder))
+                output_filename = os.path.join(output_folder, f"{line.weapon_name}.csv")
                 df.write_csv(
-                    os.path.join(output, group_name, f"{line.unit} - {line.weapon_name}.csv"), float_precision=4
+                    os.path.join(output, output_filename),
+                    float_precision=4,
                 )
 
     for e in key_errors:
