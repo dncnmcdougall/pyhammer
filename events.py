@@ -27,6 +27,16 @@ class EventResult:
     def total(self) -> int:
         return sum([(ii + 1) * v for ii, v in enumerate(self.results)])
 
+    def reduce_to_max(self, amount: int) -> "EventResult":
+        assert amount <= max_damage
+        values = [0 for _ in range(amount)]
+        for ii, v in enumerate(self.results):
+            if ii >= (amount - 1):
+                values[amount - 1] += v
+            else:
+                values[ii] += v
+        return EventResult(tuple(values), count=amount)
+
 
 def success(amount: int = 1) -> EventResult:
     assert amount <= max_damage
@@ -125,3 +135,37 @@ def collapse_tree(tree: dict[EventResult, Probability] | EventSet | list[EventSe
     for key, prob in map.items():
         res.append(Leaf("a", key, probability=prob))
     return Together(res, name=name)
+
+
+def cap_damage(
+    tree: dict[EventResult, Probability] | EventSet | list[EventSet], cap: int
+) -> dict[EventResult, Probability]:
+    map: dict[EventResult, Probability] = {}
+    if isinstance(tree, dict):
+        map = tree
+    elif isinstance(tree, EventSet):
+        map = tree.outcomes()
+    elif isinstance(tree, list):
+        map = Together(tree).outcomes()
+
+    res = defaultdict(float)
+    for key, prob in map.items():
+        capped_key = key.reduce_to_max(cap)
+        res[capped_key] += prob
+    return res
+
+
+def average_damage(tree: dict[EventResult, Probability] | EventSet | list[EventSet]) -> float:
+    map: dict[EventResult, Probability] = {}
+    if isinstance(tree, dict):
+        map = tree
+    elif isinstance(tree, EventSet):
+        map = tree.outcomes()
+    elif isinstance(tree, list):
+        map = Together(tree).outcomes()
+
+    average_damage = 0
+    res = defaultdict(float)
+    for key, prob in map.items():
+        average_damage += key.total() * prob
+    return average_damage

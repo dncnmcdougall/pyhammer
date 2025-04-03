@@ -1,6 +1,3 @@
-from copy import deepcopy
-from dataclasses import dataclass
-
 from icecream import ic
 
 import roll as rl
@@ -8,56 +5,40 @@ from actions import AttackOptions
 import actions
 from outcomes import Dice
 
-
-def nearly(a: float, b: float) -> bool:
-    res = abs(a - b) < 1e-5
-    assert res, f"{a} != {b}"
-
-
-@dataclass
-class ExpectedOutcome:
-    damage: int
-    probability: float
-    count: int
-
-
-class ExpectedOutcomes:
-    def __init__(self):
-        self.original_dict = {}
-        self.test_dict = {}
-
-    def add_expectation(self, damage, probability):
-        assert damage not in self.original_dict
-        self.original_dict[damage] = ExpectedOutcome(damage, probability, 1)
-
-    def check_counts(self):
-        for damage, test in self.test_dict.items():
-            assert test.count == 0, f"Unused damage: {damage}"
-
-    def test(self, outcomes) -> None:
-        results = outcomes.items()
-        assert len(results) == len(self.original_dict), (
-            f"Expected {len(self.original_dict)} outcomes, but found {len(results)}"
-        )
-        self._init_for_testing()
-        for key, prob in results:
-            self._test(key, prob)
-        self.check_counts()
-
-    def _init_for_testing(self):
-        total_prob = sum([v.probability for v in self.original_dict.values()])
-        nearly(total_prob, 1.0)
-
-        self.test_dict = deepcopy(self.original_dict)
-
-    def _test(self, key, prob):
-        damage = key.total()
-        assert damage in self.test_dict, f"Incorrect damage: {damage}"
-        nearly(self.test_dict[damage].probability, prob)
-        self.test_dict[damage].count -= 1
+from testutils import nearly, ExpectedOutcomes
 
 
 def test_A1D1():
+    options = AttackOptions(half_range=False, cover=False, anti_active=False, modifiers=tuple())
+
+    pass_hit_dict = {2: 5 / 6, 3: 4 / 6, 4: 3 / 6, 5: 2 / 6, 6: 1 / 6}
+    pass_wound_dict = {9: 5 / 6, 5: 4 / 6, 4: 3 / 6, 3: 2 / 6, 2: 1 / 6}
+
+    for ws, pass_hit in pass_hit_dict.items():
+        fail_hit = 1 - pass_hit
+        for st, pass_wound in pass_wound_dict.items():
+            fail_wound = 1 - pass_wound
+
+            damage, all_possibilities = rl.attack_roll(
+                attack_char=1,
+                weapon_skill=ws,
+                strength_char=st,
+                target_toughness=4,
+                save_char=7,
+                armour_penetration=0,
+                damage_char=1,
+                fnp_char=7,
+                options=options,
+                reroll=True,
+            )
+
+            eo = ExpectedOutcomes()
+            eo.add_expectation(damage=0, probability=fail_hit + (pass_hit * fail_wound))
+            eo.add_expectation(damage=1, probability=(pass_hit * pass_wound))
+            eo.test(damage.outcomes())
+
+
+def test_A1D2():
     options = AttackOptions(half_range=False, cover=False, anti_active=False, modifiers=tuple())
     damage, all_possibilities = rl.attack_roll(
         attack_char=1,
@@ -66,7 +47,7 @@ def test_A1D1():
         target_toughness=2,
         save_char=7,
         armour_penetration=0,
-        damage_char=1,
+        damage_char=2,
         fnp_char=7,
         options=options,
         reroll=True,
@@ -80,7 +61,7 @@ def test_A1D1():
 
     eo = ExpectedOutcomes()
     eo.add_expectation(damage=0, probability=fail_hit + (pass_hit * fail_wound))
-    eo.add_expectation(damage=1, probability=(pass_hit * pass_wound))
+    eo.add_expectation(damage=2, probability=(pass_hit * pass_wound))
     eo.test(damage.outcomes())
 
 
@@ -220,68 +201,10 @@ def test_Ad3D1():
     eo.test(damage.outcomes())
 
 
-def test_A1D1SH1():
-    options = AttackOptions(half_range=False, cover=False, anti_active=False, modifiers=(actions.sustained_hits(1),))
-    damage, all_possibilities = rl.attack_roll(
-        attack_char=1,
-        weapon_skill=2,
-        strength_char=10,
-        target_toughness=2,
-        save_char=7,
-        armour_penetration=0,
-        damage_char=1,
-        fnp_char=7,
-        options=options,
-        reroll=True,
-    )
-
-    fail_hit = 1 / 6
-    pass_hit = 4 / 6
-    crit_hit = 1 / 6
-
-    fail_wound = 1 / 6
-    pass_wound = 5 / 6
-
-    eo = ExpectedOutcomes()
-    eo.add_expectation(damage=0, probability=fail_hit + (pass_hit * fail_wound) + (crit_hit * fail_wound * fail_wound))
-    eo.add_expectation(damage=1, probability=(pass_hit * pass_wound) + (crit_hit * 2 * pass_wound * fail_wound))
-    eo.add_expectation(damage=2, probability=crit_hit * pass_wound * pass_wound)
-    eo.test(damage.outcomes())
-
-
-def test_A1D1LH1():
-    options = AttackOptions(half_range=False, cover=False, anti_active=False, modifiers=(actions.lethal_hits,))
-    damage, all_possibilities = rl.attack_roll(
-        attack_char=1,
-        weapon_skill=2,
-        strength_char=10,
-        target_toughness=2,
-        save_char=7,
-        armour_penetration=0,
-        damage_char=1,
-        fnp_char=7,
-        options=options,
-        reroll=True,
-    )
-
-    fail_hit = 1 / 6
-    pass_hit = 4 / 6
-    crit_hit = 1 / 6
-
-    fail_wound = 1 / 6
-    pass_wound = 5 / 6
-
-    eo = ExpectedOutcomes()
-    eo.add_expectation(damage=0, probability=fail_hit + (pass_hit * fail_wound))
-    eo.add_expectation(damage=1, probability=(pass_hit * pass_wound) + crit_hit)
-    eo.test(damage.outcomes())
-
-
 if __name__ == "__main__":
     test_A1D1()
+    test_A1D2()
     test_A2D1()
     test_A1Dd3()
     test_Ad2D1()
     test_Ad3D1()
-    test_A1D1SH1()
-    test_A1D1LH1()
