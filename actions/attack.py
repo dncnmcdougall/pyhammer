@@ -18,11 +18,22 @@ def torrent(outcomes: list[Outcome], attach_char: int | Dice, options: AttackOpt
     return [Outcome(o.value, o.roll_value, o.success, bool(o.success), o.reroll) for o in outcomes]
 
 
-def rapid_fire(amount: int) -> Modifier:
+def rapid_fire(amount: int | Dice) -> Modifier:
     @modifier(attack, f"rapid_fire_{amount}")
     def update(outcomes: list[Outcome], attach_char: int | Dice, options: AttackOptions) -> list[Outcome]:
         if options.half_range:
-            return [Outcome(o.value + amount, o.roll_value, o.success, o.bypass_next, o.reroll) for o in outcomes]
+            if isinstance(amount, Dice):
+                results = []
+                for d in amount():
+                    results.extend(
+                        [
+                            Outcome(o.value + d.roll_value, o.roll_value, o.success, o.bypass_next, o.reroll)
+                            for o in outcomes
+                        ]
+                    )
+                return results
+            else:
+                return [Outcome(o.value + amount, o.roll_value, o.success, o.bypass_next, o.reroll) for o in outcomes]
         else:
             return outcomes
 

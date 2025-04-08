@@ -172,13 +172,18 @@ class DataFile:
 
     def read(self) -> None:
         with open(self.filename, "r") as fle:
-            for ii, line in enumerate(fle):
-                if ii == 0:
-                    continue
-                stripped_line = line.strip()
-                if len(stripped_line) == 0:
-                    continue
-                self.lines.append(DataLine.parse_line(stripped_line))
+            ii = 0
+            try:
+                for ii, line in enumerate(fle):
+                    if ii == 0:
+                        continue
+                    stripped_line = line.strip()
+                    if len(stripped_line) == 0:
+                        continue
+                    self.lines.append(DataLine.parse_line(stripped_line))
+            except Exception:
+                print(f"Error in {self.filename}:{ii}")
+                raise
 
 
 if __name__ == "__main__":
@@ -191,6 +196,7 @@ if __name__ == "__main__":
         actions.rapid_fire(3),
         actions.rapid_fire(5),
         actions.rapid_fire(6),
+        actions.rapid_fire(Dice(1, 3)),
         actions.critical_hits(4),
         actions.critical_hits(5),
         actions.sustained_hits(1),
@@ -198,6 +204,7 @@ if __name__ == "__main__":
         actions.sustained_hits(Dice(1, 3, 0)),
         actions.lethal_hits,
         actions.twin_linked,
+        actions.melta(2),
         actions.melta(4),
         actions.precision,
         actions.blast,
@@ -207,7 +214,9 @@ if __name__ == "__main__":
         actions.indirect_fire,
         actions.anti("character", 4),
         actions.anti("fly", 4),
+        actions.anti("fly", 2),
         actions.anti("vehicle", 2),
+        actions.anti("infantry", 4),
         actions.devastating_wounds,
         actions.bypass_wound,
         actions.bypass_save,
@@ -216,6 +225,8 @@ if __name__ == "__main__":
         actions.one_shot,
         actions.assult,
         actions.heavy,
+        actions.lance,
+        actions.psychic,
     ]
     modifier_map = {func.name.lower().replace("_", " "): func for func in modifier_funcs}
 

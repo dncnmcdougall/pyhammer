@@ -1,0 +1,2 @@
+R:24" A:2 WS:3 S:4 AP:0 D:1
+rapid_fire_2, twin-linked

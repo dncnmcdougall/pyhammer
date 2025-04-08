@@ -56,3 +56,13 @@ def assult(outcomes: list[Outcome], options: AttackOptions) -> list[Outcome]:
 @modifier(null)
 def heavy(outcomes: list[Outcome], options: AttackOptions) -> list[Outcome]:
     return outcomes
+
+
+@modifier(null)
+def lance(outcomes: list[Outcome], options: AttackOptions) -> list[Outcome]:
+    return outcomes
+
+
+@modifier(null)
+def psychic(outcomes: list[Outcome], options: AttackOptions) -> list[Outcome]:
+    return outcomes

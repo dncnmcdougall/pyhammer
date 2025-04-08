@@ -1,0 +1,2 @@
+R:24" A:1 WS:4 S:4 AP:-1 D:1
+anti_infantry_4, devastating_wounds, rapid_fire_1

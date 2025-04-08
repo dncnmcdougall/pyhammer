@@ -1,0 +1,2 @@
+R:24" A:1 WS:3 S:4 AP:-2 D:2
+precision

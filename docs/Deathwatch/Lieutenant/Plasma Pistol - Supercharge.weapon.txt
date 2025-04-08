@@ -1,0 +1,2 @@
+R:12" A:1 WS:2 S:8 AP:-3 D:2
+hazardous, pistol

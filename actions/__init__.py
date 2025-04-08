@@ -46,4 +46,6 @@ from .null import (
     one_shot as one_shot,
     assult as assult,
     heavy as heavy,
+    lance as lance,
+    psychic as psychic,
 )

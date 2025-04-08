@@ -1,0 +1,2 @@
+R:24" A:d6 WS:3 S:6 AP:-2 D:d3
+devastating_wounds, hazardous, psychic

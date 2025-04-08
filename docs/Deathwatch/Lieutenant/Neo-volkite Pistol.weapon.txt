@@ -1,0 +1,2 @@
+R:12" A:1 WS:2 S:5 AP:0 D:2
+devastating_wounds, pistol
